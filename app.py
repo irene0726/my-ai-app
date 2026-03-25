@@ -2,7 +2,7 @@ import streamlit as st
 import google.generativeai as genai
 
 # 1. 貼上您的全新金鑰 (記得保留雙引號)
-GOOGLE_API_KEY = st.secrets["MY_API_KEY"]
+GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 2. 使用最穩定支援的 flash 模型
