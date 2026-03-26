@@ -9,9 +9,9 @@ genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- 網頁前端介面設計 ---
-st.set_page_config(page_title="產品真實口碑分析", page_icon="🔍")
-st.title("🔍 產品真實口碑一鍵分析")
-st.markdown("輸入任何產品名稱，AI 幫你秒速爬梳論壇真實評價！")
+st.set_page_config(page_title="產品網路口碑分析", page_icon="🔍")
+st.title("🔍 產品真實網路口碑一鍵分析")
+st.markdown("輸入任何產品名稱，AI 幫你秒速爬梳論壇真實評價，整理出完整報告分析！")
 
 product_name = st.text_input("📦 請輸入想查詢的產品或服務名稱：")
 
