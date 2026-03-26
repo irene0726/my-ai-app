@@ -6,7 +6,7 @@ GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 2. 使用最穩定支援的 flash 模型
-model = genai.GenerativeModel('gemini-2.5-flash')
+model = genai.GenerativeModel('gemini-2.0-flash')
 
 # --- 網頁前端介面設計 ---
 st.set_page_config(page_title="產品真實口碑分析儀", page_icon="🔍")
