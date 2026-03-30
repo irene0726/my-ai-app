@@ -25,7 +25,7 @@ st.divider()
 # 路線 A：常規全網口碑健檢
 # ==========================================
 if mode == "✅ 常規全網口碑健檢 (輸入產品名，AI 自動上網爬文)":
-    product_name = st.text_input("📦 請輸入想查詢的「產品、品牌或診所名稱」：")
+    product_name = st.text_input("📦 請輸入想查詢的「產品、品牌名稱」：")
     
     if st.button("🚀 開始口碑健檢"):
         if product_name:
