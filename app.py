@@ -10,7 +10,23 @@ model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- 網頁前端介面設計 (精品化 UI) ---
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="✨", layout="wide")
+# ==========================================
+# 🛡️ 終極隱藏魔法：移除所有 Streamlit 標籤與按鈕
+# ==========================================
+hide_streamlit_style = """
+<style>
+/* 隱藏右上角的漢堡主選單 */
+#MainMenu {visibility: hidden;}
 
+/* 隱藏右上角的 Deploy 按鈕與開發者工具列 (針對新版 Streamlit) */
+[data-testid="stToolbar"] {visibility: hidden;}
+[data-testid="stHeader"] {visibility: hidden;}
+
+/* 隱藏右下角的 Made with Streamlit 浮水印 footer */
+footer {visibility: hidden;}
+</style>
+"""
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 # ==========================================
 # 💎 側邊欄設計 (Sidebar)：打造專業軟體感
 # ==========================================
