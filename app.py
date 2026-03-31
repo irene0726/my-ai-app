@@ -15,7 +15,7 @@ st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="✨", la
 # 💎 側邊欄設計 (Sidebar)：打造專業軟體感
 # ==========================================
 with st.sidebar:
-    st.title("👩‍💻 思嘉的口碑戰情室")
+    st.title("👩‍💻 Irene's口碑戰情室")
     st.markdown("歡迎來到專屬的 AI 輿情與公關分析系統！")
     st.divider()
     
@@ -23,16 +23,16 @@ with st.sidebar:
     mode = st.radio(
         "🎯 核心分析模組：",
         (
-            "✅ 常規產品全網健檢", 
-            "🏥 醫美口碑鋪陳製造機",
-            "⚖️ 醫美療程殘酷大比拼",
-            "🚨 特定負評拆彈與攻防"
+            "✅ 產品網路輿情健檢", 
+            "🏥 醫美口碑製造機",
+            "⚖️ 醫美療程大比拼",
+            "🚨 負評拆彈與攻防"
         )
     )
     
     st.divider()
     st.caption("⚡ Powered by Gemini 2.5 Flash & Streamlit")
-    st.caption("© 2026 公關操作內部專用工具")
+    st.caption("© 2026 BOOYAH博亞內部專用工具")
 
 # ==========================================
 # 💎 主畫面動態標題
