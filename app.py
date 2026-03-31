@@ -8,72 +8,48 @@ genai.configure(api_key=GOOGLE_API_KEY)
 # 2. 使用最新 2.5 版本模型
 model = genai.GenerativeModel('gemini-2.5-flash')
 
-# --- 網頁前端介面設計 (企業級 UI 升級版) ---
-st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
+# --- 網頁前端介面設計 (精品化 UI) ---
+st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="✨", layout="wide")
 
 # ==========================================
-# 🛡️ 注入自訂 CSS：隱藏預設選單，打造 100% 私有軟體感
-# ==========================================
-hide_st_style = """
-            <style>
-            #MainMenu {visibility: hidden;}
-            footer {visibility: hidden;}
-            header {visibility: hidden;}
-            </style>
-            """
-st.markdown(hide_st_style, unsafe_allow_html=True)
-
-# ==========================================
-# 💎 側邊欄設計 (Sidebar)：高階戰情儀表板
+# 💎 側邊欄設計 (Sidebar)：打造專業軟體感
 # ==========================================
 with st.sidebar:
-    st.title("👩‍💻 思嘉的專屬口碑戰情室")
-    st.markdown("AI 輿情監測與公關防護主控台")
+    st.title("👩‍💻 Irene's口碑戰情室")
+    st.markdown("歡迎來到專屬的 AI 輿情與公關分析系統！")
     st.divider()
     
-    # 戰情室儀表板組件
-    col1, col2 = st.columns(2)
-    with col1:
-        st.metric(label="📊 系統狀態", value="🟢 上線中")
-    with col2:
-        st.metric(label="🔥 鎖定論壇", value="PTT, Dcard")
-    st.metric(label="🕸️ 即時串接平台", value="Threads, Facebook, 各大論壇")
-    
-    st.divider()
-    
+    # 將選單移到側邊欄，讓主畫面保持乾淨清爽
     mode = st.radio(
         "🎯 核心分析模組：",
         (
-            "✅ 一般產品常規健檢", 
-            "🏥 醫美口碑鋪陳製造機",
-            "⚖️ 醫美療程與儀器大比拼",
-            "🚨 特定負評拆彈與攻防"
+            "✅ 產品網路輿情健檢", 
+            "🏥 醫美口碑製造機",
+            "⚖️ 醫美療程大比拼",
+            "🚨 負評拆彈與攻防"
         )
     )
     
     st.divider()
-    st.caption("© 2026 思嘉專屬開發 ｜ AI 行銷科技工具")
+    st.caption("⚡ Powered by Gemini 2.5 Flash & Streamlit")
+    st.caption("© 2026 BOOYAH博亞內部專用工具")
 
 # ==========================================
 # 💎 主畫面動態標題
 # ==========================================
-st.title("📝 全能口碑操盤與危機處理分析儀")
-st.markdown(f"**目前啟用模式：** `{mode}`")
+st.header(f"{mode}")
 st.markdown("---")
 
 # ==========================================
 # 🚪 第一扇門：一般產品常規健檢
 # ==========================================
-if mode == "✅ 一般產品常規健檢":
-    st.info("💡 **操作指南**：輸入產品或品牌名稱，AI 將自動彙整論壇真實聲量與優缺點。")
+if mode == "✅ 常規產品全網健檢":
+    st.info("💡 **操作指南**：輸入您想查詢的保養品、3C 或保健食品名稱，AI 將自動彙整各大論壇的真實聲量與優缺點。")
     product_name = st.text_input("📦 請輸入想查詢的「產品或品牌名稱」：", placeholder="例如：娘家葉黃素、理膚寶水 B5")
     
-    if st.button("🚀 開始深度健檢", type="primary", use_container_width=True):
+    if st.button("🚀 開始深度健檢", type="primary"):
         if product_name:
-            # 使用高階的 status 載入動畫
-            with st.status("🕵️‍♂️ 系統連線與 AI 深度運算中...", expanded=True) as status:
-                st.write("🔍 掃描 Threads、Dcard、PTT 討論區...")
-                st.write("🧠 執行語意分析與公關危機探測...")
+            with st.spinner("🕵️‍♂️ AI 正在深度分析中，請稍候..."):
                 try:
                     prompt = (
                         f"你是一位資深的消費者口碑分析師。請深度分析台灣各大論壇對於「{product_name}」的最新真實討論。\n"
@@ -90,12 +66,9 @@ if mode == "✅ 一般產品常規健檢":
                         "10. 🎯 總結與行銷策略建議"
                     )
                     response = model.generate_content(prompt)
-                    status.update(label="✨ 報告解析完成！", state="complete", expanded=False)
-                    st.toast('專屬報告已產出！', icon='🎉')
-                    st.success("✅ 分析完成！以下是您的專屬報告：")
+                    st.success("✨ 分析完成！以下是您的專屬報告：")
                     st.write(response.text)
                 except Exception as e:
-                    status.update(label="❌ 發生錯誤", state="error", expanded=False)
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ 請先輸入名稱喔！")
@@ -107,15 +80,13 @@ elif mode == "🏥 醫美口碑鋪陳製造機":
     st.info("💡 **操作指南**：生成去業配感、高真實感的論壇發文與暗樁互動劇本。")
     col_t, col_a = st.columns(2)
     with col_t:
-        treatment = st.text_input("💉 療程名稱：", placeholder="例如：法令紋玻尿酸")
+        treatment = st.text_input("💉 療程名稱：", placeholder="例如：法令紋玻尿酸、玩美電波")
     with col_a:
-        advantages = st.text_input("✨ 主打優勢：", placeholder="例如：醫師美感自然、無硬塊")
+        advantages = st.text_input("✨ 主打優勢：", placeholder="例如：醫師美感自然、無硬塊、不推銷")
         
-    if st.button("🚀 生成高真實感口碑劇本", type="primary", use_container_width=True):
+    if st.button("🚀 生成高真實感口碑劇本", type="primary"):
         if treatment and advantages:
-            with st.status("✍️ AI 網軍總監正在植入真實鄉民語氣...", expanded=True) as status:
-                st.write("🎭 套用去業配感指令...")
-                st.write("🗣️ 生成多層次推文互動陣型...")
+            with st.spinner("✍️ 正在植入真實鄉民語氣..."):
                 try:
                     prompt = (
                         f"你是一位擁有 15 年經驗的頂級網路口碑操盤手，專攻台灣醫美論壇。\n"
@@ -135,12 +106,9 @@ elif mode == "🏥 醫美口碑鋪陳製造機":
                         "4. 🛡️ 競品防禦與帶風向話術：如果底下有真實網友留言推薦其他診所，我們的暗樁該用什麼話術自然地把風向帶回來？"
                     )
                     response = model.generate_content(prompt)
-                    status.update(label="✨ 劇本編寫完成！", state="complete", expanded=False)
-                    st.toast('戰術劇本已送達！', icon='🔥')
-                    st.success("✅ 以下是極致真實的口碑操作企劃：")
+                    st.success("✨ 劇本生成完成！以下是極致真實的口碑操作企劃：")
                     st.write(response.text)
                 except Exception as e:
-                    status.update(label="❌ 發生錯誤", state="error", expanded=False)
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ 請務必填寫「療程名稱」與「主打優勢」喔！")
@@ -148,8 +116,8 @@ elif mode == "🏥 醫美口碑鋪陳製造機":
 # ==========================================
 # 🚪 第三扇門：醫美療程彈性大比拼
 # ==========================================
-elif mode == "⚖️ 醫美療程與儀器大比拼":
-    st.info("💡 **操作指南**：輸入 2 到 4 個選手進行對比，系統會自動產出殘酷比較表格。")
+elif mode == "⚖️ 醫美療程殘酷大比拼":
+    st.info("💡 **操作指南**：請至少輸入兩個項目。您可以輸入 2 到 4 個選手進行對比，系統會自動產出比較表格。")
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -157,18 +125,16 @@ elif mode == "⚖️ 醫美療程與儀器大比拼":
     with col2:
         item2 = st.text_input("🥊 選手 2", placeholder="例如：十蓓電波")
     with col3:
-        item3 = st.text_input("🥊 選手 3 (選填)", placeholder="例如：玩美電波")
+        item3 = st.text_input("🥊 選手 3 (選填)", placeholder="例如：Onda超微波")
     with col4:
-        item4 = st.text_input("🥊 選手 4 (選填)", placeholder="例如：黃金電波")
+        item4 = st.text_input("🥊 選手 4 (選填)", placeholder="例如：海芙音波")
     
-    if st.button("🚀 開始多重殘酷比拼", type="primary", use_container_width=True):
+    if st.button("🚀 開始多重殘酷比拼", type="primary"):
         items_to_compare = [i for i in [item1, item2, item3, item4] if i.strip()]
         
         if len(items_to_compare) >= 2:
             items_str = "、".join(items_to_compare)
-            with st.status(f"🥊 正在對比 {items_str} 的優劣勢...", expanded=True) as status:
-                st.write("⚖️ 讀取儀器與療程技術規格...")
-                st.write("🗣️ 彙整論壇網友真實痛點與反饋...")
+            with st.spinner(f"🥊 正在對比 {items_str} ..."):
                 try:
                     prompt = (
                         f"你是一位專業且中立的醫美分析師，深諳台灣Threads、 Dcard 與 PTT 醫美板風向。\n"
@@ -182,12 +148,9 @@ elif mode == "⚖️ 醫美療程與儀器大比拼":
                         "6. 💡 總結：一句話點出這幾者的定位差異。"
                     )
                     response = model.generate_content(prompt)
-                    status.update(label="✨ 殘酷比拼完成！", state="complete", expanded=False)
-                    st.toast('比較報表出爐！', icon='📊')
-                    st.success(f"✅ 以下是 {len(items_to_compare)} 項目的深度報告：")
+                    st.success(f"✨ 比對完成！以下是 {len(items_to_compare)} 項目的深度報告：")
                     st.write(response.text)
                 except Exception as e:
-                    status.update(label="❌ 發生錯誤", state="error", expanded=False)
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ 請至少輸入兩個項目才能進行比較喔！")
@@ -196,14 +159,12 @@ elif mode == "⚖️ 醫美療程與儀器大比拼":
 # 🚪 第四扇門：特定負評拆彈與攻防
 # ==========================================
 else: 
-    st.error("🚨 **危機處理主控台**：請將論壇或 Google 評論的原始負評貼在下方，啟動緊急防守對策。")
-    raw_reviews = st.text_area("💬 請貼上網友的「原始負評」內容：", height=150, placeholder="將客訴或抱怨文直接貼在這裡...")
+    st.error("🚨 **操作指南**：當客戶遇到炎上危機時，請將論壇或 Google 評論的原始負評貼在下方，AI 將立即產出防守對策。")
+    raw_reviews = st.text_area("💬 請貼上網友的「原始負評」或「客訴文章」內容：", height=150, placeholder="將 Dcard、PTT 或 Google 評論的抱怨文直接貼在這裡...")
     
-    if st.button("🚀 啟動緊急拆彈程序", type="primary", use_container_width=True):
+    if st.button("🚀 啟動緊急拆彈程序", type="primary"):
         if raw_reviews:
-            with st.status("🚨 危機處理專家已連線，正在擬定對策...", expanded=True) as status:
-                st.write("🛡️ 評估炎上風險與擴散層級...")
-                st.write("⚔️ 生成官方安撫與暗樁防守腳本...")
+            with st.spinner("🚨 AI 危機處理專家正在擬定對策，請稍候..."):
                 try:
                     prompt = (
                         f"你是一位擁有 15 年經驗的資深危機處理公關以及有資深的網路口碑操作經驗。客戶目前遭遇了以下網友的具體負評：\n"
@@ -218,12 +179,9 @@ else:
                         "7. 🩹 官方回覆與私訊溝通範本 (公開留言與私訊安撫文字)" 
                     )
                     response = model.generate_content(prompt)
-                    status.update(label="✨ 危機拆彈對策擬定完畢！", state="complete", expanded=False)
-                    st.toast('防守劇本已生成！', icon='🛡️')
-                    st.success("✅ 以下是為您擬定的作戰計畫：")
+                    st.success("✨ 分析完成！以下是危機拆彈對策：")
                     st.write(response.text)
                 except Exception as e:
-                    status.update(label="❌ 發生錯誤", state="error", expanded=False)
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ 拆彈模式需要您先貼上原始負評喔！")
