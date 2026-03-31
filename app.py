@@ -32,7 +32,7 @@ with st.sidebar:
     
     st.divider()
     st.caption("⚡ Powered by Gemini 2.5 Flash & Streamlit")
-    st.caption("© 2026 BOOYAH博亞內部專用工具")
+    st.caption("© 2026 design by Irene0726")
 
 # ==========================================
 # 💎 主畫面動態標題
