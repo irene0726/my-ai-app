@@ -1,0 +1,15 @@
+[theme]
+# 這是按鈕與強調主色：質感香檳金
+primaryColor = "#C5A880"
+
+# 這是主畫面背景色：純淨白
+backgroundColor = "#FFFFFF"
+
+# 這是側邊欄背景色：極簡淺灰
+secondaryBackgroundColor = "#F7F7F9"
+
+# 這是文字顏色：高雅深灰 (比純黑看起來更柔和專業)
+textColor = "#333333"
+
+# 字體風格
+font = "sans serif"
