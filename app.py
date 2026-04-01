@@ -96,7 +96,7 @@ with tab2:
         advantages = st.text_input("✨ 主打優勢：", placeholder="例如：醫師美感自然、無硬塊")
     
     st.markdown("---")
-    st.markdown("#### 🎛️ 視覺化人設建構面板")
+    st.markdown("#### 🎛️ 人設設定")
     
     # 🌟 使用互動元件代替手動打字
     col_p1, col_p2 = st.columns(2)
@@ -104,13 +104,13 @@ with tab2:
         # 使用選擇滑桿 (Select Slider) 調整金錢觀
         finance_level = st.select_slider(
             "💰 預算與金錢觀設定：",
-            options=["不在乎錢(貴婦)", "預算充足", "一般素人", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
+            options=["不在乎價格(貴婦)", "預算充足", "一般", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
             value="一般素人"
         )
         # 使用選擇滑桿調整怕痛程度
         pain_level = st.select_slider(
             "😣 痛感承受度設定：",
-            options=["超耐痛(老司機)", "微怕痛", "一般素人", "極度怕痛(小白)"],
+            options=["超耐痛", "微怕痛", "一般", "極度怕痛"],
             value="一般素人"
         )
         
@@ -118,16 +118,16 @@ with tab2:
         # 平台語氣下拉選單
         platform_style = st.selectbox("🗣️ 鎖定論壇語氣：", [
             "一般真實網用語氣", 
-            "Dcard 女孩板 (愛用QQ、求打醒、空格排版)", 
-            "PTT 醫美板老手 (重視儀器參數、講話直接)", 
-            "Threads 脆友 (句子短、不愛標點、帶有厭世感)"
+            "Dcard 女孩板 (有較多murmur)",
+            "Threads 脆友 (句子短、帶有自嘲及厭世感)"
+            "PTT 醫美板老手 (講話簡明扼要)", 
         ])
         
         # 使用切換開關 (Toggle) 加入急迫情境
-        is_urgent = st.toggle("🚨 加入「急迫焦慮情境」(例如：快要結婚、前任交新歡)")
+        is_urgent = st.toggle("🚨 加入「動機及情境」(例如：快要結婚、前任交新歡)")
         urgent_text = ""
         if is_urgent:
-            urgent_text = st.text_input("👉 請簡單描述急迫原因：", placeholder="例如：下個月就要拍婚紗了，卡粉超嚴重")
+            urgent_text = st.text_input("👉 請描述原因，越詳細越好：", placeholder="例如：下個月就要拍婚紗了，卡粉超嚴重")
 
     # 🌟 即時動態生成 Prompt 預覽
     st.markdown("##### 👁️ AI 接收到的隱藏人設指令預覽")
@@ -147,7 +147,7 @@ with tab2:
             with st.spinner("✍️ 正在讀取互動面板參數，植入真實鄉民語氣..."):
                 try:
                     prompt = (
-                        f"你是一位擁有 15 年經驗的頂級網路口碑操盤手，專攻台灣醫美論壇。\n"
+                        f"你是一位擁有 15 年經驗的頂級網路口碑操盤手，專攻台灣熱門網路醫美論壇，包含Threads、Dcard、PTT。\n"
                         f"請針對以下設定，為客戶撰寫一套「極致真實、絕對去業配感」的論壇口碑鋪陳劇本。\n\n"
                         f"【操作目標設定】\n"
                         f"📍 療程項目：{treatment}\n"
@@ -187,7 +187,7 @@ with tab3:
     with col3:
         item3 = st.text_input("🥊 選手 3 (選填)", placeholder="例如：玩美電波")
     with col4:
-        item4 = st.text_input("🥊 選手 4 (選填)", placeholder="例如：黃金電波")
+        item4 = st.text_input("🥊 選手 4 (選填)", placeholder="例如：海芙電波")
     
     if st.button("🚀 開始多重殘酷比拼", type="primary", key="btn3"):
         items_to_compare = [i for i in [item1, item2, item3, item4] if i.strip()]
@@ -249,45 +249,45 @@ with tab4:
 # 🚪 第五分頁：語氣訓練儀 (🎓 全新加入：內部教育訓練專用)
 # ------------------------------------------
 with tab5:
-    st.info("💡 **教案模式**：透過隨意操作下方的「開關」與「滑桿」，讓團隊成員觀察 AI 是如何一步步疊加維度，從「生硬機器人」進化成「超真實鄉民」。")
+    st.info("💡 **教案模式**：透過隨意操作下方的「開關」與「滑桿」，觀察 AI 是如何一步步疊加維度，從「生硬機器人」進化成「超真實鄉民」。")
     
-    st.markdown("#### 🛠️ 1. 設定基礎題材 (預設以法令紋為例)")
+    st.markdown("#### 🛠️ 1. 設定基礎題材")
     col_t5, col_a5 = st.columns(2)
     with col_t5:
-        base_treatment = st.text_input("💉 示範療程：", value="法令紋玻尿酸", key="t5")
+        base_treatment = st.text_input("💉 產品/療程：", value="法令紋玻尿酸", key="t5")
     with col_a5:
         base_advantage = st.text_input("✨ 主打優勢：", value="醫師美感自然、不推銷", key="a5")
 
-    st.markdown("#### 🎛️ 2. 操作訓練維度 (隨意疊加看看)")
+    st.markdown("#### 🎛️ 2. 操作訓練維度")
     
     col_p5_1, col_p5_2 = st.columns(2)
     with col_p5_1:
         # 使用選擇滑桿
         finance_level = st.select_slider(
             "💰 預算與金錢觀設定：",
-            options=["(不指定)", "不在乎錢(貴婦)", "預算充足", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
+            options=["(不指定)", "不在乎價格(貴婦)", "預算充足", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
             value="(不指定)",
             key="f5"
         )
         # 使用下拉選單
         platform_style = st.selectbox(
             "🗣️ 鎖定論壇語氣：",
-            ["(不指定)", "Dcard 女孩板 (愛用QQ、求打醒)", "PTT 醫美板老手 (重視參數、講話直接)", "Threads 脆友 (句子短、不愛標點、厭世感)"],
+            ["(不指定)", "Dcard 女孩板 (有較多murmur)", "Threads 脆友 (句子短、帶有自嘲及厭世感)","PTT 醫美板老手 (講話簡明扼要)"],
             key="p5"
         )
 
     with col_p5_2:
         # 🌟 使用 st.toggle 開關
-        use_scenario = st.toggle("🚨 加入「急迫焦慮情境」", key="tog_s")
+        use_scenario = st.toggle("🚨 加入「動機及情境」", key="tog_s")
         urgent_text = ""
         # 只有當開關打開時，才會出現這個輸入框
         if use_scenario:
-            urgent_text = st.text_input("👉 請描述急迫原因：", value="下個月就要拍婚紗了，卡粉超嚴重", key="u5")
+            urgent_text = st.text_input("👉 請描述原因：", value="下個月就要拍婚紗了，卡粉超嚴重", key="u5")
 
     st.divider()
 
     # --- 在背後動態組合送給 AI 的 Prompt ---
-    training_prompt = f"你現在是一位醫美論壇的素人發文者。請幫我寫一篇關於「{base_treatment}」的討論短文，並在文中自然帶出「{base_advantage}」的體驗。\n\n"
+    training_prompt = f"你現在是一位常在論壇發文的一般網友。請幫我寫一篇關於「{base_treatment}」的討論短文，並在文中自然帶出「{base_advantage}」的體驗。\n\n"
     training_prompt += "【嚴格指令限制】：\n"
     training_prompt += "1. 資訊模糊化：絕對不可以完整打出診所名稱或醫師全名。\n"
 
