@@ -9,78 +9,57 @@ genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- 網頁前端介面設計 ---
-st.set_page_config(page_title="思嘉的 AI 口碑戰情室", page_icon="✨", layout="wide")
+st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
 
 # ==========================================
-# 🛡️ 隱藏魔法 & 個人化視覺設定
+# 🛡️ 隱藏魔法：移除所有 Streamlit 標籤、按鈕與浮水印，打造純淨版面
 # ==========================================
-custom_css = """
+hide_streamlit_style = """
 <style>
-/* 隱藏預設選單與浮水印 */
 #MainMenu {visibility: hidden;}
 [data-testid="stToolbar"] {visibility: hidden;}
 [data-testid="stHeader"] {visibility: hidden;}
 footer {visibility: hidden;}
-
-/* 分頁籤置中、字體放大且加粗，提升現代感 */
+/* 讓分頁籤的字體稍微放大，增加質感 */
 .stTabs [data-baseweb="tab-list"] {
-    gap: 24px;
-    justify-content: center;
+    gap: 10px;
 }
 .stTabs [data-baseweb="tab"] {
-    font-size: 18px;
-    font-weight: 600;
-    padding: 12px 16px;
-}
-
-/* 👑 右下角個人專屬浮水印 */
-.custom-footer {
-    position: fixed;
-    bottom: 10px;
-    right: 20px;
-    color: #AAAAAA;
-    font-size: 13px;
-    letter-spacing: 1px;
-    z-index: 100;
+    font-size: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 </style>
-<div class="custom-footer">© 2026 Crafted by 思嘉 | PR & Word-of-Mouth AI Hub</div>
 """
-st.markdown(custom_css, unsafe_allow_html=True)
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # ==========================================
 # 💎 主標題區
 # ==========================================
-st.title("✨ 思嘉的 AI 口碑戰情室")
-st.caption("AI-Powered Public Relations & Word-of-Mouth Marketing Hub")
+st.title("📝 全能口碑操盤與危機處理分析儀")
+st.markdown("專屬 AI 輿情監測與公關防護主控台")
 st.divider()
 
 # ==========================================
-# 🗂️ 核心功能導覽列 (五大分頁)
+# 🗂️ 核心功能：使用「分頁籤 (Tabs)」取代傳統按鈕
 # ==========================================
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
-    "📦 產品全網健檢", 
-    "✍️ 醫美口碑劇本", 
-    "⚖️ 療程殘酷比拼", 
-    "🚨 危機負評拆彈",
-    "🎓 語氣訓練儀"
+tab1, tab2, tab3, tab4 = st.tabs([
+    "✅ 一般產品常規健檢", 
+    "🏥 醫美口碑鋪陳製造機", 
+    "⚖️ 醫美療程彈性大比拼", 
+    "🚨 特定負評拆彈與攻防"
 ])
 
 # ------------------------------------------
-# 🚪 第一分頁：產品全網健檢
+# 🚪 第一分頁：一般產品常規健檢
 # ------------------------------------------
 with tab1:
-    with st.expander("🔍 健檢條件設定 (點擊可收合/展開)", expanded=True):
-        product_name = st.text_input(
-            "請輸入「產品或品牌名稱」：", 
-            placeholder="例如：娘家葉黃素、理膚寶水 B5",
-            help="💡 輸入想查詢的產品，AI 將自動彙整各大論壇真實聲量與優缺點。"
-        )
-        btn1 = st.button("🚀 執行深度健檢", type="primary", key="btn1")
+    st.info("💡 **操作指南**：輸入產品或品牌名稱，AI 將自動彙整各大論壇真實聲量與優缺點。")
+    product_name = st.text_input("📦 請輸入想查詢的「產品或品牌名稱」：", placeholder="例如：理膚寶水 B5")
     
-    if btn1:
+    if st.button("🚀 開始深度健檢", type="primary"):
         if product_name:
-            with st.spinner("🕵️‍♂️ 戰情室連線中，正在撈取全網數據..."):
+            with st.spinner("🕵️‍♂️ AI 正在深度分析中，請稍候..."):
                 try:
                     prompt = (
                         f"你是一位資深的消費者口碑分析師。請深度分析台灣各大論壇對於「{product_name}」的最新真實討論。\n"
@@ -97,7 +76,7 @@ with tab1:
                         "10. 🎯 總結與行銷策略建議"
                     )
                     response = model.generate_content(prompt)
-                    st.success("✨ 分析完成！您現在可以將上方的『條件設定面板』收合，方便閱讀完整報告。")
+                    st.success("✨ 分析完成！以下是專屬報告：")
                     st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
@@ -105,57 +84,72 @@ with tab1:
             st.warning("⚠️ 請先輸入名稱喔！")
 
 # ------------------------------------------
-# 🚪 第二分頁：醫美口碑劇本 (🌟 保留您最愛的手動輸入)
+# 🚪 第二分頁：醫美口碑鋪陳製造機 (🌟 升級：多維度人設建構器)
 # ------------------------------------------
 with tab2:
-    with st.expander("✍️ 劇本參數與人設設定 (點擊可收合/展開)", expanded=True):
-        col_t, col_a = st.columns(2)
-        with col_t:
-            treatment = st.text_input(
-                "💉 療程名稱：", 
-                placeholder="例如：法令紋玻尿酸",
-                help="💡 準備操作的醫美療程或儀器名稱"
-            )
-        with col_a:
-            advantages = st.text_input(
-                "✨ 主打優勢：", 
-                placeholder="例如：醫師美感自然、無硬塊",
-                help="💡 客戶診所或醫師希望溝通的核心賣點"
-            )
-            
-        persona = st.text_input(
-            "🎭 賦予發文者靈魂 (自訂人設)：", 
-            placeholder="例如：準備下個月結婚、瘋狂容貌焦慮的新娘...",
-            help="💡 自由輸入您想要的鄉民身分，AI 將精準模仿該身分的語氣、金錢觀與在意點來撰寫文章。"
-        )
-            
-        btn2 = st.button("🚀 生成高真實感劇本", type="primary", key="btn2")
+    st.info("💡 **操作指南**：生成去業配感、高真實感的論壇發文與暗樁互動劇本。")
+    col_t, col_a = st.columns(2)
+    with col_t:
+        treatment = st.text_input("💉 療程名稱：", placeholder="例如：法令紋玻尿酸")
+    with col_a:
+        advantages = st.text_input("✨ 主打優勢：", placeholder="例如：醫師美感自然、無硬塊")
         
-    if btn2:
+    st.markdown("##### 🎭 進階人設建構器 (Persona Builder)")
+    col_p1, col_p2 = st.columns(2)
+    with col_p1:
+        scenario = st.text_input("🎬 發文動機 (微情境)：", placeholder="例如：下個月拍婚紗發現卡粉、被前男友嫌棄...")
+        financial = st.selectbox("💰 金錢觀與決策邏輯：", [
+            "(不指定)", 
+            "精打細算小資族 (極度在意價格與隱藏費用，追求高CP值)", 
+            "預算有限學生黨 (存錢很久，極度怕失敗浪費錢)", 
+            "高冷理智貴婦 (不在乎錢，只在乎品質、服務細節與隱私)"
+        ])
+    with col_p2:
+        platform_tone = st.selectbox("🗣️ 平台專屬語癖：", [
+            "(不指定)", 
+            "Dcard 女孩板 (愛用 QQ、求打醒、常用空格代替標點符號排版)", 
+            "PTT 醫美板老手 (重視儀器參數、發數，直球對決少廢話)", 
+            "Threads 脆友 (句子短、不愛標點、帶點自嘲與厭世感)"
+        ])
+        extra_notes = st.text_input("✍️ 特殊要求或禁忌 (選填)：", placeholder="例如：一定要抱怨一下諮詢師態度、不要提到保濕...")
+        
+    if st.button("🚀 生成高真實感口碑劇本", type="primary"):
         if treatment and advantages:
-            actual_persona = persona.strip() if persona else "一般真實網友"
-            with st.spinner(f"✍️ 正在以「{actual_persona}」的語氣撰寫劇本..."):
+            # 將使用者的選擇組合裝訂成超級提示詞
+            actual_persona = ""
+            if scenario: actual_persona += f"- 【發文動機與情境】：{scenario}\n"
+            if financial != "(不指定)": actual_persona += f"- 【金錢觀與決策邏輯】：{financial}\n"
+            if platform_tone != "(不指定)": actual_persona += f"- 【平台語癖與排版】：{platform_tone}\n"
+            if extra_notes: actual_persona += f"- 【特殊要求與禁忌】：{extra_notes}\n"
+            
+            # 如果什麼都沒填，給予防呆預設值
+            if not actual_persona.strip():
+                actual_persona = "- 【綜合設定】：一般真實網友，語氣自然平淡，無特殊偏好。"
+
+            with st.spinner("✍️ 正在融合多維度人設，植入真實鄉民語氣..."):
                 try:
                     prompt = (
                         f"你是一位擁有 15 年經驗的頂級網路口碑操盤手，專攻台灣醫美論壇。\n"
                         f"請針對以下設定，為客戶撰寫一套「極致真實、絕對去業配感」的論壇口碑鋪陳劇本。\n\n"
                         f"【操作目標設定】\n"
                         f"📍 療程項目：{treatment}\n"
-                        f"📍 診所/醫師主打優勢：{advantages}\n"
-                        f"📍 發文者專屬人設：{actual_persona}\n\n"
+                        f"📍 診所/醫師主打優勢：{advantages}\n\n"
+                        f"【發文者專屬立體人設】\n"
+                        f"請務必嚴格遵循以下多維度人設來調整語氣、排版與內文邏輯：\n"
+                        f"{actual_persona}\n\n"
                         f"【⚠️ 絕對不可違背的『去業配』鐵血指令】\n"
                         "1. 資訊模糊化：主文中【絕對不可以】完整打出診所名稱或醫師全名。\n"
                         "2. 禁用公關用語：嚴禁出現「專業團隊、高CP值、強烈推薦」等行銷詞彙。\n"
                         "3. 植入無傷大雅的抱怨：必須穿插 1~2 個微負評（如：難預約、附近難停車、等太久）。\n"
-                        f"4. 強化情緒起伏與人設：劇本與推文必須完美符合「{actual_persona}」這個身分會有的語氣、金錢考量或痛點。\n\n"
+                        "4. 強化情緒起伏：根據上述的「發文動機」與「金錢觀」，寫出最真實的焦慮、期待或痛點。\n\n"
                         "請提供：\n"
-                        "1. 🎯 平台主文切角與吸睛標題 (Threads、Dcard 各 3 個)\n"
-                        "2. 📝 主文內容大綱 (內容須符合Threads、Dcard 平台討論屬性，並完美融入設定的人設語氣)\n"
+                        "1. 🎯 平台主文切角與吸睛標題 (提供 3 個)\n"
+                        "2. 📝 主文內容大綱 (必須完美融入設定的人設語癖與排版習慣)\n"
                         "3. 🗣️ 暗樁推文與蓋樓劇本 (1-5樓推文，需包含中立言論、資訊設計問答、微負評包裝好評)\n"
                         "4. 🛡️ 競品防禦與帶風向話術：如果底下有真實網友留言推薦其他診所，我們的暗樁該用什麼話術自然地把風向帶回來？"
                     )
                     response = model.generate_content(prompt)
-                    st.success("✨ 劇本生成完成！您現在可以將上方的『參數設定面板』收合，方便閱讀完整企劃。")
+                    st.success("✨ 劇本生成完成！以下是口碑操作企劃：")
                     st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
@@ -163,23 +157,21 @@ with tab2:
             st.warning("⚠️ 請務必填寫「療程名稱」與「主打優勢」喔！")
 
 # ------------------------------------------
-# 🚪 第三分頁：療程殘酷比拼
+# 🚪 第三分頁：醫美療程彈性大比拼
 # ------------------------------------------
 with tab3:
-    with st.expander("🥊 參賽選手設定 (點擊可收合/展開)", expanded=True):
-        col1, col2, col3, col4 = st.columns(4)
-        with col1:
-            item1 = st.text_input("🥊 選手 1", placeholder="例如：鳳凰電波")
-        with col2:
-            item2 = st.text_input("🥊 選手 2", placeholder="例如：十蓓電波")
-        with col3:
-            item3 = st.text_input("🥊 選手 3 (選填)", placeholder="例如：玩美電波")
-        with col4:
-            item4 = st.text_input("🥊 選手 4 (選填)", placeholder="例如：黃金電波", help="💡 可輸入 2 到 4 個選手進行對比")
-        
-        btn3 = st.button("🚀 開始多重殘酷比拼", type="primary", key="btn3")
-        
-    if btn3:
+    st.info("💡 **操作指南**：輸入 2 到 4 個選手進行對比，系統會自動產出比較表格。")
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        item1 = st.text_input("🥊 選手 1", placeholder="例如：鳳凰電波")
+    with col2:
+        item2 = st.text_input("🥊 選手 2", placeholder="例如：十蓓電波")
+    with col3:
+        item3 = st.text_input("🥊 選手 3 (選填)", placeholder="例如：玩美電波")
+    with col4:
+        item4 = st.text_input("🥊 選手 4 (選填)", placeholder="例如：黃金電波")
+    
+    if st.button("🚀 開始多重殘酷比拼", type="primary"):
         items_to_compare = [i for i in [item1, item2, item3, item4] if i.strip()]
         if len(items_to_compare) >= 2:
             items_str = "、".join(items_to_compare)
@@ -205,19 +197,13 @@ with tab3:
             st.warning("⚠️ 請至少輸入兩個項目才能進行比較喔！")
 
 # ------------------------------------------
-# 🚪 第四分頁：危機負評拆彈
+# 🚪 第四分頁：特定負評拆彈與攻防
 # ------------------------------------------
 with tab4:
-    with st.expander("🚨 負評危機輸入區 (點擊可收合/展開)", expanded=True):
-        raw_reviews = st.text_area(
-            "請貼上網友的「原始負評」內容：", 
-            height=150, 
-            placeholder="將客訴或抱怨文貼在這裡...",
-            help="💡 當客戶遇到炎上危機時，請將論壇或 Google 評論的原始負評貼在下方，啟動緊急防守對策。"
-        )
-        btn4 = st.button("🚀 啟動緊急拆彈程序", type="primary", key="btn4")
-        
-    if btn4:
+    st.error("🚨 **危機處理主控台**：請將原始負評貼在下方，啟動緊急防守對策。")
+    raw_reviews = st.text_area("💬 請貼上網友的「原始負評」內容：", height=150, placeholder="將客訴或抱怨文貼在這裡...")
+    
+    if st.button("🚀 啟動緊急拆彈程序", type="primary"):
         if raw_reviews:
             with st.spinner("🚨 危機處理專家已連線，正在擬定對策..."):
                 try:
@@ -240,76 +226,3 @@ with tab4:
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ 拆彈模式需要您先貼上原始負評喔！")
-
-# ------------------------------------------
-# 🚪 第五分頁：語氣訓練儀 (🎓 全新加入：內部教育訓練專用)
-# ------------------------------------------
-with tab5:
-    st.info("💡 **教案模式**：透過隨意操作下方的「開關」與「滑桿」，讓團隊成員觀察 AI 是如何一步步疊加維度，從「生硬機器人」進化成「超真實鄉民」。")
-    
-    st.markdown("#### 🛠️ 1. 設定基礎題材 (預設以法令紋為例)")
-    col_t5, col_a5 = st.columns(2)
-    with col_t5:
-        base_treatment = st.text_input("💉 示範療程：", value="法令紋玻尿酸", key="t5")
-    with col_a5:
-        base_advantage = st.text_input("✨ 主打優勢：", value="醫師美感自然、不推銷", key="a5")
-
-    st.markdown("#### 🎛️ 2. 操作訓練維度 (隨意疊加看看)")
-    
-    col_p5_1, col_p5_2 = st.columns(2)
-    with col_p5_1:
-        # 使用選擇滑桿
-        finance_level = st.select_slider(
-            "💰 預算與金錢觀設定：",
-            options=["(不指定)", "不在乎錢(貴婦)", "預算充足", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
-            value="(不指定)",
-            key="f5"
-        )
-        # 使用下拉選單
-        platform_style = st.selectbox(
-            "🗣️ 鎖定論壇語氣：",
-            ["(不指定)", "Dcard 女孩板 (愛用QQ、求打醒)", "PTT 醫美板老手 (重視參數、講話直接)", "Threads 脆友 (句子短、不愛標點、厭世感)"],
-            key="p5"
-        )
-
-    with col_p5_2:
-        # 🌟 使用 st.toggle 開關
-        use_scenario = st.toggle("🚨 加入「急迫焦慮情境」", key="tog_s")
-        urgent_text = ""
-        # 只有當開關打開時，才會出現這個輸入框
-        if use_scenario:
-            urgent_text = st.text_input("👉 請描述急迫原因：", value="下個月就要拍婚紗了，卡粉超嚴重", key="u5")
-
-    st.divider()
-
-    # --- 在背後動態組合送給 AI 的 Prompt ---
-    training_prompt = f"你現在是一位醫美論壇的素人發文者。請幫我寫一篇關於「{base_treatment}」的討論短文，並在文中自然帶出「{base_advantage}」的體驗。\n\n"
-    training_prompt += "【嚴格指令限制】：\n"
-    training_prompt += "1. 資訊模糊化：絕對不可以完整打出診所名稱或醫師全名。\n"
-
-    has_extra = False
-    if finance_level != "(不指定)":
-        training_prompt += f"2. 金錢觀設定：你的金錢觀是「{finance_level}」，請在文中表現出對應的消費態度與猶豫感。\n"
-        has_extra = True
-    if platform_style != "(不指定)":
-        training_prompt += f"3. 語氣設定：完全模仿「{platform_style}」的用語習慣與排版格式。\n"
-        has_extra = True
-    if use_scenario and urgent_text:
-        training_prompt += f"4. 情境設定：{urgent_text}。請在內文表現出強烈的焦慮與急迫感。\n"
-        has_extra = True
-
-    if not has_extra:
-        training_prompt += "👉 綜合設定：使用一般官方、客氣且平淡的推薦語氣即可 (生硬機器人狀態)。\n"
-
-    # --- 顯示即時的 Prompt 讓受訓者學習 ---
-    st.markdown("##### 🔍 觀察送給 AI 的幕後指令變化")
-    st.code(training_prompt, language="markdown")
-    
-    if st.button("🚀 執行訓練測試", type="primary", key="btn5"):
-        with st.spinner("🧠 AI 正在根據維度疊加模擬中..."):
-            try:
-                response = model.generate_content(training_prompt)
-                st.success("✨ 產出結果比對：")
-                st.write(response.text)
-            except Exception as e:
-                st.error(f"發生錯誤：{e}")
