@@ -98,26 +98,23 @@ with tab2:
     st.markdown("---")
     st.markdown("#### 🎛️ 人設設定")
     
-    # 🌟 修改點 1：把動機情境移到第一項，並永久顯示輸入框
     urgent_text = st.text_input("🚨 動機及情境 (強烈建議填寫)：", placeholder="例如：快要結婚、前任交新歡、下個月要拍婚紗了，卡粉超嚴重...")
 
     col_p1, col_p2 = st.columns(2)
     with col_p1:
-        # 使用選擇滑桿 (Select Slider) 調整金錢觀
+        # 🌟 修改點：將「一般」改為「不指定」
         finance_level = st.select_slider(
             "💰 預算與金錢觀設定：",
-            options=["不在乎價格(貴婦)", "預算充足", "一般", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
-            value="一般"
+            options=["不在乎價格(貴婦)", "預算充足", "不指定", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
+            value="不指定"
         )
-        # 使用選擇滑桿調整怕痛程度
         pain_level = st.select_slider(
             "😣 痛感承受度設定：",
-            options=["超耐痛", "微怕痛", "一般", "極度怕痛"],
-            value="一般"
+            options=["超耐痛", "微怕痛", "不指定", "極度怕痛"],
+            value="不指定"
         )
         
     with col_p2:
-        # 平台語氣下拉選單
         platform_style = st.selectbox("🗣️ 鎖定論壇語氣：", [
             "一般真實網用語氣", 
             "Dcard 女孩板 (有較多murmur)",
@@ -125,18 +122,18 @@ with tab2:
             "PTT 醫美板老手 (講話簡明扼要)", 
         ])
 
-    # 🌟 即時動態生成 Prompt 預覽
     st.markdown("##### 👁️ AI 接收到的隱藏人設指令預覽")
     
-    # 在背景自動組合這些條件
+    # 🌟 優化點：如果選擇「不指定」，就不把該維度寫入指令中，保持指令純淨
     live_prompt = ""
     if urgent_text.strip():
         live_prompt += f"👉 特殊情境：{urgent_text}，請在內文表現出強烈的焦慮與急迫感。\n"
-    live_prompt += f"👉 金錢觀念：{finance_level}\n"
-    live_prompt += f"👉 痛感承受：{pain_level}\n"
+    if finance_level != "不指定":
+        live_prompt += f"👉 金錢觀念：{finance_level}\n"
+    if pain_level != "不指定":
+        live_prompt += f"👉 痛感承受：{pain_level}\n"
     live_prompt += f"👉 平台語癖：{platform_style}\n"
     
-    # 用程式碼區塊顯示，看起來很有科技感
     st.code(live_prompt, language="markdown")
         
     if st.button("🚀 以此人設生成高真實感劇本", type="primary"):
@@ -216,95 +213,4 @@ with tab3:
 # ------------------------------------------
 with tab4:
     st.error("🚨 **危機處理主控台**：請將原始負評貼在下方，啟動緊急防守對策。")
-    raw_reviews = st.text_area("💬 請貼上網友的「原始負評」內容：", height=150, placeholder="將客訴或抱怨文貼在這裡...")
-    
-    if st.button("🚀 啟動緊急拆彈程序", type="primary", key="btn4"):
-        if raw_reviews:
-            with st.spinner("🚨 危機處理專家已連線，正在擬定對策..."):
-                try:
-                    prompt = (
-                        f"你是一位擁有 15 年經驗的資深危機處理公關以及有資深的網路口碑操作經驗。客戶目前遭遇了以下網友的具體負評：\n"
-                        f"「{raw_reviews}」\n"
-                        "請提供「負評拆彈作戰計畫」，包含：\n"
-                        "1. 🚨 危機等級與擴散風險\n"
-                        "2. 🌋 核網友情緒與真實痛點\n"
-                        "3. 🛡️ 負評處理及風向平衡 (5 個不同人設的暗樁留言切角，溫和稀釋負面)\n"
-                        "4. ⚔️ 口碑主動攻防與風向引導 (風向轉移、反向質疑原 PO 動機、洗文稀釋策略)\n"
-                        "5. ⚖️ 平台機制與長尾防護 (檢舉下架可行性與 SEO 防護)\n"
-                        "6. ⏳ 黃金應對行動時間表 (2小時與24小時內的具體動作)\n"
-                        "7. 🩹 官方回覆與私訊溝通範本 (公開留言與私訊安撫文字)" 
-                    )
-                    response = model.generate_content(prompt)
-                    st.success("✨ 危機拆彈對策擬定完畢！")
-                    st.write(response.text)
-                except Exception as e:
-                    st.error(f"發生錯誤：{e}")
-        else:
-            st.warning("⚠️ 拆彈模式需要您先貼上原始負評喔！")
-
-# ------------------------------------------
-# 🚪 第五分頁：文案訓練儀 (教育訓練專用)
-# ------------------------------------------
-with tab5:
-    st.info("💡 **教案模式**：透過隨意調整下方的設定，觀察 AI 是如何一步步疊加維度，從「生硬機器人」進化成「超真實鄉民」。")
-    
-    st.markdown("#### 🛠️ 1. 設定基礎題材")
-    col_t5, col_a5 = st.columns(2)
-    with col_t5:
-        base_treatment = st.text_input("💉 產品/療程：", value="法令紋玻尿酸", key="t5")
-    with col_a5:
-        base_advantage = st.text_input("✨ 主打優勢：", value="醫師美感自然、不推銷", key="a5")
-
-    st.markdown("#### 🎛️ 2. 操作訓練維度")
-    
-    # 🌟 修改點 2：同樣把情境移到第一項，並永久顯示
-    urgent_text_5 = st.text_input("🚨 動機及情境：", value="下個月就要拍婚紗了，卡粉超嚴重", key="u5", help="清空此欄位即代表不加入特殊情境")
-
-    col_p5_1, col_p5_2 = st.columns(2)
-    with col_p5_1:
-        finance_level_5 = st.select_slider(
-            "💰 預算與金錢觀設定：",
-            options=["(不指定)", "不在乎價格(貴婦)", "預算充足", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
-            value="(不指定)",
-            key="f5"
-        )
-    with col_p5_2:
-        platform_style_5 = st.selectbox(
-            "🗣️ 鎖定論壇語氣：",
-            ["(不指定)", "Dcard 女孩板 (有較多murmur)", "Threads 脆友 (句子短、帶有自嘲及厭世感)","PTT 醫美板老手 (講話簡明扼要)"],
-            key="p5"
-        )
-
-    st.divider()
-
-    # --- 在背後動態組合送給 AI 的 Prompt ---
-    training_prompt = f"你現在是一位常在論壇發文的一般網友。請幫我寫一篇關於「{base_treatment}」的討論短文，並在文中自然帶出「{base_advantage}」的體驗。\n\n"
-    training_prompt += "【嚴格指令限制】：\n"
-    training_prompt += "👉 資訊模糊化：絕對不可以完整打出診所名稱或醫師全名。\n"
-
-    has_extra = False
-    if urgent_text_5.strip():
-        training_prompt += f"👉 情境設定：{urgent_text_5}。請在內文表現出強烈的焦慮與急迫感。\n"
-        has_extra = True
-    if finance_level_5 != "(不指定)":
-        training_prompt += f"👉 金錢觀設定：你的金錢觀是「{finance_level_5}」，請在文中表現出對應的消費態度與猶豫感。\n"
-        has_extra = True
-    if platform_style_5 != "(不指定)":
-        training_prompt += f"👉 語氣設定：完全模仿「{platform_style_5}」的用語習慣與排版格式。\n"
-        has_extra = True
-
-    if not has_extra:
-        training_prompt += "👉 綜合設定：使用一般官方、客氣且平淡的推薦語氣即可 (生硬機器人狀態)。\n"
-
-    # --- 顯示即時的 Prompt 讓受訓者學習 ---
-    st.markdown("##### 🔍 觀察送給 AI 的幕後指令變化")
-    st.code(training_prompt, language="markdown")
-    
-    if st.button("🚀 執行訓練測試", type="primary", key="btn5"):
-        with st.spinner("🧠 AI 正在根據維度疊加模擬中..."):
-            try:
-                response = model.generate_content(training_prompt)
-                st.success("✨ 產出結果比對：")
-                st.write(response.text)
-            except Exception as e:
-                st.error(f"發生錯誤：{e}")
+    raw_reviews = st.
