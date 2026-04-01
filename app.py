@@ -9,7 +9,7 @@ genai.configure(api_key=GOOGLE_API_KEY)
 model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- 網頁前端介面設計 ---
-st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
+st.set_page_config(page_title="全能口碑操作分析儀", page_icon="📝", layout="wide")
 
 # ==========================================
 # 🛡️ 隱藏魔法：移除所有 Streamlit 標籤、按鈕與浮水印，打造純淨版面
