@@ -84,34 +84,45 @@ with tab1:
             st.warning("⚠️ 請先輸入名稱喔！")
 
 # ------------------------------------------
-# 🚪 第二分頁：醫美口碑鋪陳製造機
+# 🚪 第二分頁：醫美口碑鋪陳製造機 (🌟 升級：手動輸入人設)
 # ------------------------------------------
 with tab2:
-    st.info("💡 **操作指南**：生成去業配感、高真實感的論壇發文與暗樁互動劇本。")
+    st.info("💡 **操作指南**：生成去業配感、高真實感的論壇發文與暗樁互動劇本。您可自由賦予發文者靈魂。")
     col_t, col_a = st.columns(2)
     with col_t:
         treatment = st.text_input("💉 療程名稱：", placeholder="例如：法令紋玻尿酸")
     with col_a:
         advantages = st.text_input("✨ 主打優勢：", placeholder="例如：醫師美感自然、無硬塊")
         
+    # 👑 新增：手動打字輸入人設
+    persona = st.text_input(
+        "🎭 賦予發文者靈魂 (自訂人設)：", 
+        placeholder="例如：準備下個月結婚、瘋狂容貌焦慮的新娘...",
+        help="💡 自由輸入您想要的鄉民身分，AI 將精準模仿該身分的語氣、金錢觀與在意點來撰寫文章。"
+    )
+        
     if st.button("🚀 生成高真實感口碑劇本", type="primary"):
         if treatment and advantages:
-            with st.spinner("✍️ 正在植入真實鄉民語氣..."):
+            # 如果使用者趕時間沒填寫人設，系統自動補上預設值，避免報錯
+            actual_persona = persona.strip() if persona else "一般真實網友"
+            
+            with st.spinner(f"✍️ 正在以「{actual_persona}」的語氣植入真實鄉民語氣..."):
                 try:
                     prompt = (
                         f"你是一位擁有 15 年經驗的頂級網路口碑操盤手，專攻台灣醫美論壇。\n"
                         f"請針對以下設定，為客戶撰寫一套「極致真實、絕對去業配感」的論壇口碑鋪陳劇本。\n\n"
                         f"【操作目標設定】\n"
                         f"📍 療程項目：{treatment}\n"
-                        f"📍 診所/醫師主打優勢：{advantages}\n\n"
+                        f"📍 診所/醫師主打優勢：{advantages}\n"
+                        f"📍 發文者專屬人設：{actual_persona}\n\n"
                         f"【⚠️ 絕對不可違背的『去業配』鐵血指令】\n"
                         "1. 資訊模糊化：主文中【絕對不可以】完整打出診所名稱或醫師全名。\n"
                         "2. 禁用公關用語：嚴禁出現「專業團隊、高CP值、強烈推薦」等行銷詞彙。\n"
                         "3. 植入無傷大雅的抱怨：必須穿插 1~2 個微負評（如：難預約、附近難停車、等太久）。\n"
-                        "4. 強化情緒起伏：寫出術前爬文的焦慮、怕痛、怕失敗等底層情緒。\n\n"
+                        f"4. 強化情緒起伏與人設：劇本與推文必須完美符合「{actual_persona}」這個身分會有的語氣、金錢考量或痛點。\n\n"
                         "請提供：\n"
                         "1. 🎯 平台主文切角與吸睛標題 (Threads、Dcard 各 3 個)\n"
-                        "2. 📝 主文內容大綱 (內容須符合Threads、Dcard 平台討論屬性)\n"
+                        "2. 📝 主文內容大綱 (內容須符合Threads、Dcard 平台討論屬性，並完美融入設定的人設語氣)\n"
                         "3. 🗣️ 暗樁推文與蓋樓劇本 (1-5樓推文，需包含中立言論、資訊設計問答、微負評包裝好評)\n"
                         "4. 🛡️ 競品防禦與帶風向話術：如果底下有真實網友留言推薦其他診所，我們的暗樁該用什麼話術自然地把風向帶回來？"
                     )
@@ -127,70 +138,4 @@ with tab2:
 # 🚪 第三分頁：醫美療程彈性大比拼
 # ------------------------------------------
 with tab3:
-    st.info("💡 **操作指南**：輸入 2 到 4 個選手進行對比，系統會自動產出比較表格。")
-    col1, col2, col3, col4 = st.columns(4)
-    with col1:
-        item1 = st.text_input("🥊 選手 1", placeholder="例如：鳳凰電波")
-    with col2:
-        item2 = st.text_input("🥊 選手 2", placeholder="例如：十蓓電波")
-    with col3:
-        item3 = st.text_input("🥊 選手 3 (選填)", placeholder="例如：玩美電波")
-    with col4:
-        item4 = st.text_input("🥊 選手 4 (選填)", placeholder="例如：黃金電波")
-    
-    if st.button("🚀 開始多重殘酷比拼", type="primary"):
-        items_to_compare = [i for i in [item1, item2, item3, item4] if i.strip()]
-        if len(items_to_compare) >= 2:
-            items_str = "、".join(items_to_compare)
-            with st.spinner(f"🥊 正在對比 {items_str} ..."):
-                try:
-                    prompt = (
-                        f"你是一位專業且中立的醫美分析師，深諳台灣Threads、 Dcard 與 PTT 醫美板風向。\n"
-                        f"請幫我深度比較以下項目：{items_str}。\n\n"
-                        "報告必須包含以下模塊，並使用 Markdown 表格呈現對比：\n"
-                        "1. 🔬 核心原理白話文解釋：這幾者在技術原理上的關鍵差異。\n"
-                        "2. 📊 清楚對比表格：包含效果、維持時間、痛感評估、恢復期、價格區間、副作用風險、論壇討論熱度。\n"
-                        "3. 🎯 適合對象分析：分別針對不同預算、痛感承受度、期望效果的受眾給予建議。\n"
-                        "4. 🗣️ 論壇真實風向與常見抱怨：網友對這幾項療程分別最常酸什麼？或最擔憂什麼？\n"
-                        "5. ⚔️ 口碑行銷攻防建議：若客戶主打其中一項，該如何在論壇「請益文」中自然地引導風向？提供 3 個發文切角。\n"
-                        "6. 💡 總結：一句話點出這幾者的定位差異。"
-                    )
-                    response = model.generate_content(prompt)
-                    st.success(f"✨ 比對完成！以下是 {len(items_to_compare)} 項目的深度報告：")
-                    st.write(response.text)
-                except Exception as e:
-                    st.error(f"發生錯誤：{e}")
-        else:
-            st.warning("⚠️ 請至少輸入兩個項目才能進行比較喔！")
-
-# ------------------------------------------
-# 🚪 第四分頁：特定負評拆彈與攻防
-# ------------------------------------------
-with tab4:
-    st.error("🚨 **危機處理主控台**：請將原始負評貼在下方，啟動緊急防守對策。")
-    raw_reviews = st.text_area("💬 請貼上網友的「原始負評」內容：", height=150, placeholder="將客訴或抱怨文貼在這裡...")
-    
-    if st.button("🚀 啟動緊急拆彈程序", type="primary"):
-        if raw_reviews:
-            with st.spinner("🚨 危機處理專家已連線，正在擬定對策..."):
-                try:
-                    prompt = (
-                        f"你是一位擁有 15 年經驗的資深危機處理公關以及有資深的網路口碑操作經驗。客戶目前遭遇了以下網友的具體負評：\n"
-                        f"「{raw_reviews}」\n"
-                        "請提供「負評拆彈作戰計畫」，包含：\n"
-                        "1. 🚨 危機等級與擴散風險\n"
-                        "2. 🌋 核網友情緒與真實痛點\n"
-                        "3. 🛡️ 負評處理及風向平衡 (5 個不同人設的暗樁留言切角，溫和稀釋負面)\n"
-                        "4. ⚔️ 口碑主動攻防與風向引導 (風向轉移、反向質疑原 PO 動機、洗文稀釋策略)\n"
-                        "5. ⚖️ 平台機制與長尾防護 (檢舉下架可行性與 SEO 防護)\n"
-                        "6. ⏳ 黃金應對行動時間表 (2小時與24小時內的具體動作)\n"
-                        "7. 🩹 官方回覆與私訊溝通範本 (公開留言與私訊安撫文字)" 
-                    )
-                    response = model.generate_content(prompt)
-                    st.success("✨ 危機拆彈對策擬定完畢！")
-                    st.write(response.text)
-                except Exception as e:
-                    st.error(f"發生錯誤：{e}")
-        else:
-            st.warning("⚠️ 拆彈模式需要您先貼上原始負評喔！")
-
+    st.info("💡 **操作指南**
