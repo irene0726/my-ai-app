@@ -70,4 +70,143 @@ with tab1:
                         "3. ✨ 真實優點歸納 (口語化列出 3-5 點網友高討論的特色)\n"
                         "4. 💣 踩雷與缺點抱怨 (不修飾口語化列出真實痛點)\n"
                         "5. 📝 以一般網友口吻分享此產品使用心得\n"
-                        "6. 🗣️ 素人發文切角建議 (提供 5 個最
+                        "6. 🗣️ 素人發文切角建議 (提供 5 個最自然、不具業配感的論壇討論情境)\n"
+                        "7. 📌 此產品於各論壇討論風向差異 (Threads、Dcard、PTT 的網友在意的點有何不同？)\n"
+                        "8. 🚨 潛在公關危機預警 (目前最致命的負面標籤，並給予平衡建議)\n"
+                        "9. 🔗 競業分析及對比（找出相對於競業的優勢做口碑攻防）\n"
+                        "10. 🎯 總結與行銷策略建議"
+                    )
+                    response = model.generate_content(prompt)
+                    st.success("✨ 分析完成！以下是專屬報告：")
+                    st.write(response.text)
+                except Exception as e:
+                    st.error(f"發生錯誤：{e}")
+        else:
+            st.warning("⚠️ 請先輸入名稱喔！")
+
+# ------------------------------------------
+# 🚪 第二分頁：醫美口碑鋪陳製造機 (保留您的原始版本)
+# ------------------------------------------
+with tab2:
+    st.info("💡 **操作指南**：生成去業配感、高真實感的論壇發文與暗樁互動劇本。")
+    col_t, col_a = st.columns(2)
+    with col_t:
+        treatment = st.text_input("💉 療程名稱：", placeholder="例如：法令紋玻尿酸")
+    with col_a:
+        advantages = st.text_input("✨ 主打優勢：", placeholder="例如：醫師美感自然、無硬塊")
+        
+    st.markdown("##### 🎭 進階人設建構器 (Persona Builder)")
+    col_p1, col_p2 = st.columns(2)
+    with col_p1:
+        scenario = st.text_input("🎬 發文動機 (微情境)：", placeholder="例如：下個月拍婚紗發現卡粉、被前男友嫌棄...")
+        financial = st.selectbox("💰 金錢觀與決策邏輯：", [
+            "(不指定)", 
+            "精打細算小資族 (極度在意價格與隱藏費用，追求高CP值)", 
+            "預算有限學生黨 (存錢很久，極度怕失敗浪費錢)", 
+            "高冷理智貴婦 (不在乎錢，只在乎品質、服務細節與隱私)"
+        ])
+    with col_p2:
+        platform_tone = st.selectbox("🗣️ 平台專屬語癖：", [
+            "(不指定)", 
+            "Dcard 女孩板 (愛用 QQ、求打醒、常用空格代替標點符號排版)", 
+            "PTT 醫美板老手 (重視儀器參數、發數，直球對決少廢話)", 
+            "Threads 脆友 (句子短、不愛標點、帶點自嘲與厭世感)"
+        ])
+        extra_notes = st.text_input("✍️ 特殊要求或禁忌 (選填)：", placeholder="例如：一定要抱怨一下諮詢師態度、不要提到保濕...")
+        
+    if st.button("🚀 生成高真實感口碑劇本", type="primary", key="btn2"):
+        if treatment and advantages:
+            # 將使用者的選擇組合裝訂成超級提示詞
+            actual_persona = ""
+            if scenario: actual_persona += f"- 【發文動機與情境】：{scenario}\n"
+            if financial != "(不指定)": actual_persona += f"- 【金錢觀與決策邏輯】：{financial}\n"
+            if platform_tone != "(不指定)": actual_persona += f"- 【平台語癖與排版】：{platform_tone}\n"
+            if extra_notes: actual_persona += f"- 【特殊要求與禁忌】：{extra_notes}\n"
+            
+            # 如果什麼都沒填，給予防呆預設值
+            if not actual_persona.strip():
+                actual_persona = "- 【綜合設定】：一般真實網友，語氣自然平淡，無特殊偏好。"
+
+            with st.spinner("✍️ 正在融合多維度人設，植入真實鄉民語氣..."):
+                try:
+                    prompt = (
+                        f"你是一位擁有 15 年經驗的頂級網路口碑操盤手，專攻台灣醫美論壇。\n"
+                        f"請針對以下設定，為客戶撰寫一套「極致真實、絕對去業配感」的論壇口碑鋪陳劇本。\n\n"
+                        f"【操作目標設定】\n"
+                        f"📍 療程項目：{treatment}\n"
+                        f"📍 診所/醫師主打優勢：{advantages}\n\n"
+                        f"【發文者專屬立體人設】\n"
+                        f"請務必嚴格遵循以下多維度人設來調整語氣、排版與內文邏輯：\n"
+                        f"{actual_persona}\n\n"
+                        f"【⚠️ 絕對不可違背的『去業配』鐵血指令】\n"
+                        "1. 資訊模糊化：主文中【絕對不可以】完整打出診所名稱或醫師全名。\n"
+                        "2. 禁用公關用語：嚴禁出現「專業團隊、高CP值、強烈推薦」等行銷詞彙。\n"
+                        "3. 植入無傷大雅的抱怨：必須穿插 1~2 個微負評（如：難預約、附近難停車、等太久）。\n"
+                        "4. 強化情緒起伏：根據上述的「發文動機」與「金錢觀」，寫出最真實的焦慮、期待或痛點。\n\n"
+                        "請提供：\n"
+                        "1. 🎯 平台主文切角與吸睛標題 (提供 3 個)\n"
+                        "2. 📝 主文內容大綱 (必須完美融入設定的人設語癖與排版習慣)\n"
+                        "3. 🗣️ 暗樁推文與蓋樓劇本 (1-5樓推文，需包含中立言論、資訊設計問答、微負評包裝好評)\n"
+                        "4. 🛡️ 競品防禦與帶風向話術：如果底下有真實網友留言推薦其他診所，我們的暗樁該用什麼話術自然地把風向帶回來？"
+                    )
+                    response = model.generate_content(prompt)
+                    st.success("✨ 劇本生成完成！以下是口碑操作企劃：")
+                    st.write(response.text)
+                except Exception as e:
+                    st.error(f"發生錯誤：{e}")
+        else:
+            st.warning("⚠️ 請務必填寫「療程名稱」與「主打優勢」喔！")
+
+# ------------------------------------------
+# 🚪 第三分頁：醫美療程彈性大比拼
+# ------------------------------------------
+with tab3:
+    st.info("💡 **操作指南**：輸入 2 到 4 個選手進行對比，系統會自動產出比較表格。")
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        item1 = st.text_input("🥊 選手 1", placeholder="例如：鳳凰電波")
+    with col2:
+        item2 = st.text_input("🥊 選手 2", placeholder="例如：十蓓電波")
+    with col3:
+        item3 = st.text_input("🥊 選手 3 (選填)", placeholder="例如：玩美電波")
+    with col4:
+        item4 = st.text_input("🥊 選手 4 (選填)", placeholder="例如：黃金電波")
+    
+    if st.button("🚀 開始多重殘酷比拼", type="primary", key="btn3"):
+        items_to_compare = [i for i in [item1, item2, item3, item4] if i.strip()]
+        if len(items_to_compare) >= 2:
+            items_str = "、".join(items_to_compare)
+            with st.spinner(f"🥊 正在對比 {items_str} ..."):
+                try:
+                    prompt = (
+                        f"你是一位專業且中立的醫美分析師，深諳台灣Threads、 Dcard 與 PTT 醫美板風向。\n"
+                        f"請幫我深度比較以下項目：{items_str}。\n\n"
+                        "報告必須包含以下模塊，並使用 Markdown 表格呈現對比：\n"
+                        "1. 🔬 核心原理白話文解釋：這幾者在技術原理上的關鍵差異。\n"
+                        "2. 📊 清楚對比表格：包含效果、維持時間、痛感評估、恢復期、價格區間、副作用風險、論壇討論熱度。\n"
+                        "3. 🎯 適合對象分析：分別針對不同預算、痛感承受度、期望效果的受眾給予建議。\n"
+                        "4. 🗣️ 論壇真實風向與常見抱怨：網友對這幾項療程分別最常酸什麼？或最擔憂什麼？\n"
+                        "5. ⚔️ 口碑行銷攻防建議：若客戶主打其中一項，該如何在論壇「請益文」中自然地引導風向？提供 3 個發文切角。\n"
+                        "6. 💡 總結：一句話點出這幾者的定位差異。"
+                    )
+                    response = model.generate_content(prompt)
+                    st.success(f"✨ 比對完成！以下是 {len(items_to_compare)} 項目的深度報告：")
+                    st.write(response.text)
+                except Exception as e:
+                    st.error(f"發生錯誤：{e}")
+        else:
+            st.warning("⚠️ 請至少輸入兩個項目才能進行比較喔！")
+
+# ------------------------------------------
+# 🚪 第四分頁：特定負評拆彈與攻防
+# ------------------------------------------
+with tab4:
+    st.error("🚨 **危機處理主控台**：請將原始負評貼在下方，啟動緊急防守對策。")
+    raw_reviews = st.text_area("💬 請貼上網友的「原始負評」內容：", height=150, placeholder="將客訴或抱怨文貼在這裡...")
+    
+    if st.button("🚀 啟動緊急拆彈程序", type="primary", key="btn4"):
+        if raw_reviews:
+            with st.spinner("🚨 危機處理專家已連線，正在擬定對策..."):
+                try:
+                    prompt = (
+                        f"你是一位擁有 15 年經驗的資深危機處理公關以及有資深的網路口碑操作經驗
