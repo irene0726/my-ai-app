@@ -102,15 +102,16 @@ with tab2:
 
     col_p1, col_p2 = st.columns(2)
     with col_p1:
-        # 🌟 修改點：將「一般」改為「不指定」
+        # 🌟 修改點：將「不指定」移到陣列最左邊
         finance_level = st.select_slider(
             "💰 預算與金錢觀設定：",
-            options=["不在乎價格(貴婦)", "預算充足", "不指定", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
+            options=["不指定", "不在乎價格(貴婦)", "預算充足", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
             value="不指定"
         )
+        # 🌟 修改點：將「不指定」移到陣列最左邊
         pain_level = st.select_slider(
             "😣 痛感承受度設定：",
-            options=["超耐痛", "微怕痛", "不指定", "極度怕痛"],
+            options=["不指定", "超耐痛", "微怕痛", "極度怕痛"],
             value="不指定"
         )
         
@@ -124,7 +125,6 @@ with tab2:
 
     st.markdown("##### 👁️ AI 接收到的隱藏人設指令預覽")
     
-    # 🌟 優化點：如果選擇「不指定」，就不把該維度寫入指令中，保持指令純淨
     live_prompt = ""
     if urgent_text.strip():
         live_prompt += f"👉 特殊情境：{urgent_text}，請在內文表現出強烈的焦慮與急迫感。\n"
@@ -258,6 +258,7 @@ with tab5:
 
     col_p5_1, col_p5_2 = st.columns(2)
     with col_p5_1:
+        # 🌟 修改點：將「(不指定)」移到陣列最左邊
         finance_level_5 = st.select_slider(
             "💰 預算與金錢觀設定：",
             options=["(不指定)", "不在乎價格(貴婦)", "預算充足", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
