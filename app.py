@@ -105,13 +105,13 @@ with tab2:
         finance_level = st.select_slider(
             "💰 預算與金錢觀設定：",
             options=["不在乎價格(貴婦)", "預算充足", "一般", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
-            value="一般素人"
+            value="一般"
         )
         # 使用選擇滑桿調整怕痛程度
         pain_level = st.select_slider(
             "😣 痛感承受度設定：",
             options=["超耐痛", "微怕痛", "一般", "極度怕痛"],
-            value="一般素人"
+            value="一般"
         )
         
     with col_p2:
