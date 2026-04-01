@@ -41,14 +41,13 @@ st.markdown("專屬 AI 輿情監測與公關防護主控台")
 st.divider()
 
 # ==========================================
-# 🗂️ 核心功能：加入第五分頁 (教育訓練)
+# 🗂️ 核心功能：使用「分頁籤 (Tabs)」取代傳統按鈕
 # ==========================================
-tab1, tab2, tab3, tab4, tab5 = st.tabs([
+tab1, tab2, tab3, tab4 = st.tabs([
     "✅ 一般產品常規健檢", 
     "🏥 醫美口碑鋪陳製造機", 
     "⚖️ 醫美療程彈性大比拼", 
-    "🚨 特定負評拆彈與攻防",
-    "🎓 語氣調校訓練儀 (內部訓練)"
+    "🚨 特定負評拆彈與攻防"
 ])
 
 # ------------------------------------------
@@ -58,7 +57,7 @@ with tab1:
     st.info("💡 **操作指南**：輸入產品或品牌名稱，AI 將自動彙整各大論壇真實聲量與優缺點。")
     product_name = st.text_input("📦 請輸入想查詢的「產品或品牌名稱」：", placeholder="例如：理膚寶水 B5")
     
-    if st.button("🚀 開始深度健檢", type="primary", key="btn1"):
+    if st.button("🚀 開始深度健檢", type="primary"):
         if product_name:
             with st.spinner("🕵️‍♂️ AI 正在深度分析中，請稍候..."):
                 try:
@@ -85,7 +84,7 @@ with tab1:
             st.warning("⚠️ 請先輸入名稱喔！")
 
 # ------------------------------------------
-# 🚪 第二分頁：醫美口碑鋪陳製造機
+# 🚪 第二分頁：醫美口碑鋪陳製造機 (🌟 升級：多維度人設建構器)
 # ------------------------------------------
 with tab2:
     st.info("💡 **操作指南**：生成去業配感、高真實感的論壇發文與暗樁互動劇本。")
@@ -95,33 +94,57 @@ with tab2:
     with col_a:
         advantages = st.text_input("✨ 主打優勢：", placeholder="例如：醫師美感自然、無硬塊")
         
-    persona = st.text_input(
-        "🎭 賦予發文者靈魂 (自訂人設)：", 
-        placeholder="例如：準備下個月結婚焦慮的新娘、精打細算的小資女...",
-        help="💡 自由輸入您想要的鄉民身分，AI 將精準模仿該身分的語氣與痛點來撰寫文章。"
-    )
+    st.markdown("##### 🎭 進階人設建構器 (Persona Builder)")
+    col_p1, col_p2 = st.columns(2)
+    with col_p1:
+        scenario = st.text_input("🎬 發文動機 (微情境)：", placeholder="例如：下個月拍婚紗發現卡粉、被前男友嫌棄...")
+        financial = st.selectbox("💰 金錢觀與決策邏輯：", [
+            "(不指定)", 
+            "精打細算小資族 (極度在意價格與隱藏費用，追求高CP值)", 
+            "預算有限學生黨 (存錢很久，極度怕失敗浪費錢)", 
+            "高冷理智貴婦 (不在乎錢，只在乎品質、服務細節與隱私)"
+        ])
+    with col_p2:
+        platform_tone = st.selectbox("🗣️ 平台專屬語癖：", [
+            "(不指定)", 
+            "Dcard 女孩板 (愛用 QQ、求打醒、常用空格代替標點符號排版)", 
+            "PTT 醫美板老手 (重視儀器參數、發數，直球對決少廢話)", 
+            "Threads 脆友 (句子短、不愛標點、帶點自嘲與厭世感)"
+        ])
+        extra_notes = st.text_input("✍️ 特殊要求或禁忌 (選填)：", placeholder="例如：一定要抱怨一下諮詢師態度、不要提到保濕...")
         
-    if st.button("🚀 生成高真實感口碑劇本", type="primary", key="btn2"):
+    if st.button("🚀 生成高真實感口碑劇本", type="primary"):
         if treatment and advantages:
-            actual_persona = persona.strip() if persona else "一般真實網友"
+            # 將使用者的選擇組合裝訂成超級提示詞
+            actual_persona = ""
+            if scenario: actual_persona += f"- 【發文動機與情境】：{scenario}\n"
+            if financial != "(不指定)": actual_persona += f"- 【金錢觀與決策邏輯】：{financial}\n"
+            if platform_tone != "(不指定)": actual_persona += f"- 【平台語癖與排版】：{platform_tone}\n"
+            if extra_notes: actual_persona += f"- 【特殊要求與禁忌】：{extra_notes}\n"
             
-            with st.spinner(f"✍️ 正在以「{actual_persona}」的語氣植入真實鄉民語氣..."):
+            # 如果什麼都沒填，給予防呆預設值
+            if not actual_persona.strip():
+                actual_persona = "- 【綜合設定】：一般真實網友，語氣自然平淡，無特殊偏好。"
+
+            with st.spinner("✍️ 正在融合多維度人設，植入真實鄉民語氣..."):
                 try:
                     prompt = (
                         f"你是一位擁有 15 年經驗的頂級網路口碑操盤手，專攻台灣醫美論壇。\n"
                         f"請針對以下設定，為客戶撰寫一套「極致真實、絕對去業配感」的論壇口碑鋪陳劇本。\n\n"
                         f"【操作目標設定】\n"
                         f"📍 療程項目：{treatment}\n"
-                        f"📍 診所/醫師主打優勢：{advantages}\n"
-                        f"📍 發文者專屬人設：{actual_persona}\n\n"
+                        f"📍 診所/醫師主打優勢：{advantages}\n\n"
+                        f"【發文者專屬立體人設】\n"
+                        f"請務必嚴格遵循以下多維度人設來調整語氣、排版與內文邏輯：\n"
+                        f"{actual_persona}\n\n"
                         f"【⚠️ 絕對不可違背的『去業配』鐵血指令】\n"
                         "1. 資訊模糊化：主文中【絕對不可以】完整打出診所名稱或醫師全名。\n"
                         "2. 禁用公關用語：嚴禁出現「專業團隊、高CP值、強烈推薦」等行銷詞彙。\n"
                         "3. 植入無傷大雅的抱怨：必須穿插 1~2 個微負評（如：難預約、附近難停車、等太久）。\n"
-                        f"4. 強化情緒起伏與人設：寫出符合「{actual_persona}」這個身分會有的術前焦慮、怕痛、金錢考量或底層情緒。\n\n"
+                        "4. 強化情緒起伏：根據上述的「發文動機」與「金錢觀」，寫出最真實的焦慮、期待或痛點。\n\n"
                         "請提供：\n"
-                        "1. 🎯 平台主文切角與吸睛標題 (Threads、Dcard 各 3 個)\n"
-                        f"2. 📝 主文內容大綱 (內容須符合Threads、Dcard 平台討論屬性，並完美融入「{actual_persona}」的語氣)\n"
+                        "1. 🎯 平台主文切角與吸睛標題 (提供 3 個)\n"
+                        "2. 📝 主文內容大綱 (必須完美融入設定的人設語癖與排版習慣)\n"
                         "3. 🗣️ 暗樁推文與蓋樓劇本 (1-5樓推文，需包含中立言論、資訊設計問答、微負評包裝好評)\n"
                         "4. 🛡️ 競品防禦與帶風向話術：如果底下有真實網友留言推薦其他診所，我們的暗樁該用什麼話術自然地把風向帶回來？"
                     )
@@ -148,7 +171,7 @@ with tab3:
     with col4:
         item4 = st.text_input("🥊 選手 4 (選填)", placeholder="例如：黃金電波")
     
-    if st.button("🚀 開始多重殘酷比拼", type="primary", key="btn3"):
+    if st.button("🚀 開始多重殘酷比拼", type="primary"):
         items_to_compare = [i for i in [item1, item2, item3, item4] if i.strip()]
         if len(items_to_compare) >= 2:
             items_str = "、".join(items_to_compare)
@@ -180,7 +203,7 @@ with tab4:
     st.error("🚨 **危機處理主控台**：請將原始負評貼在下方，啟動緊急防守對策。")
     raw_reviews = st.text_area("💬 請貼上網友的「原始負評」內容：", height=150, placeholder="將客訴或抱怨文貼在這裡...")
     
-    if st.button("🚀 啟動緊急拆彈程序", type="primary", key="btn4"):
+    if st.button("🚀 啟動緊急拆彈程序", type="primary"):
         if raw_reviews:
             with st.spinner("🚨 危機處理專家已連線，正在擬定對策..."):
                 try:
@@ -203,57 +226,3 @@ with tab4:
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ 拆彈模式需要您先貼上原始負評喔！")
-
-# ------------------------------------------
-# 🚪 第五分頁：語氣調校訓練儀 (教育訓練專用)
-# ------------------------------------------
-with tab5:
-    st.info("💡 **教案模式**：透過隨意開關下方的「維度條件」，讓團隊成員直接觀察 AI 是如何從「生硬機器人」進化成「超真實鄉民」。")
-    
-    st.markdown("#### 🛠️ 1. 設定基礎題材 (預設以法令紋為例)")
-    col_t5, col_a5 = st.columns(2)
-    with col_t5:
-        base_treatment = st.text_input("💉 示範療程：", value="法令紋玻尿酸", key="t5")
-    with col_a5:
-        base_advantage = st.text_input("✨ 主打優勢：", value="醫師美感自然、不推銷", key="a5")
-
-    st.markdown("#### 🎛️ 2. 開啟調校維度 (嘗試疊加不同開關)")
-    
-    # 使用 Streamlit 的 Toggle (開關按鈕)
-    col_tog1, col_tog2, col_tog3 = st.columns(3)
-    with col_tog1:
-        use_scenario = st.toggle("🎬 加入微情境", help="賦予發文者一個迫切的動機")
-    with col_tog2:
-        use_slang = st.toggle("🗣️ 加入論壇語癖", help="注入特定平台的黑話與排版習慣")
-    with col_tog3:
-        use_finance = st.toggle("💰 加入金錢觀", help="設定預算限制，誘發真實的抉擇感")
-    
-    st.divider()
-
-    # --- 動態組合背後的 Prompt ---
-    training_prompt = f"你現在是一位醫美論壇的素人發文者。請幫我寫一篇關於「{base_treatment}」的討論短文，並在文中自然帶出「{base_advantage}」的體驗。\n\n"
-    training_prompt += "【指令限制】：\n"
-    
-    if use_scenario:
-        training_prompt += "👉 情境設定：你下個月就要拍婚紗了，但昨天試妝被新秘說卡粉超嚴重，現在極度焦慮急著求救。\n"
-    if use_slang:
-        training_prompt += "👉 語氣設定：完全模仿 Dcard 女孩板的用語，多用「QQ」、「被燒到」、「求打醒」，並且常用空格代替標點符號。\n"
-    if use_finance:
-        training_prompt += "👉 金錢觀設定：你是一個月薪三萬的小資女，這筆錢是存很久的，極度怕痛也怕失敗浪費錢，很擔心被諮詢師強迫推銷。\n"
-    
-    # 如果都沒開，給一個基礎指令
-    if not (use_scenario or use_slang or use_finance):
-        training_prompt += "👉 語氣設定：使用一般官方客氣的推薦語氣即可。\n"
-
-    # --- 顯示即時的 Prompt 讓受訓者學習 ---
-    st.markdown("##### 🔍 送給 AI 的幕後指令 (Prompt 即時變化)")
-    st.code(training_prompt, language="markdown")
-    
-    if st.button("🚀 執行訓練測試", type="primary", key="btn5"):
-        with st.spinner("🧠 AI 正在根據維度疊加模擬中..."):
-            try:
-                response = model.generate_content(training_prompt)
-                st.success("✨ 產出結果比對：")
-                st.write(response.text)
-            except Exception as e:
-                st.error(f"發生錯誤：{e}")
