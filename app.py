@@ -78,6 +78,14 @@ with tab1:
                     response = model.generate_content(prompt)
                     st.success("✨ 分析完成！以下是專屬報告：")
                     st.write(response.text)
+                    
+                    # 🌟 新增：一鍵下載按鈕
+                    st.download_button(
+                        label="📥 一鍵匯出分析報告 (.txt)",
+                        data=response.text,
+                        file_name=f"{product_name}_全網口碑健檢報告.txt",
+                        mime="text/plain"
+                    )
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -118,6 +126,14 @@ with tab2:
                     response = model.generate_content(prompt)
                     st.success("✨ 劇本生成完成！以下是口碑操作企劃：")
                     st.write(response.text)
+                    
+                    # 🌟 新增：一鍵下載按鈕
+                    st.download_button(
+                        label="📥 一鍵匯出公關劇本 (.txt)",
+                        data=response.text,
+                        file_name=f"{treatment}_論壇口碑劇本.txt",
+                        mime="text/plain"
+                    )
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -158,6 +174,14 @@ with tab3:
                     response = model.generate_content(prompt)
                     st.success(f"✨ 比對完成！以下是 {len(items_to_compare)} 項目的深度報告：")
                     st.write(response.text)
+                    
+                    # 🌟 新增：一鍵下載按鈕
+                    st.download_button(
+                        label="📥 一鍵匯出殘酷比拼報告 (.txt)",
+                        data=response.text,
+                        file_name="療程比較報告.txt",
+                        mime="text/plain"
+                    )
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -189,8 +213,15 @@ with tab4:
                     response = model.generate_content(prompt)
                     st.success("✨ 危機拆彈對策擬定完畢！")
                     st.write(response.text)
+                    
+                    # 🌟 新增：一鍵下載按鈕
+                    st.download_button(
+                        label="📥 一鍵匯出作戰計畫 (.txt)",
+                        data=response.text,
+                        file_name="負評拆彈作戰計畫.txt",
+                        mime="text/plain"
+                    )
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ 拆彈模式需要您先貼上原始負評喔！")
-
