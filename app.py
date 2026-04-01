@@ -119,7 +119,7 @@ with tab2:
         platform_style = st.selectbox("🗣️ 鎖定論壇語氣：", [
             "一般真實網用語氣", 
             "Dcard 女孩板 (有較多murmur)",
-            "Threads 脆友 (句子短、帶有自嘲及厭世感)"
+            "Threads 脆友 (句子短、帶有自嘲及厭世感)",
             "PTT 醫美板老手 (講話簡明扼要)", 
         ])
         
