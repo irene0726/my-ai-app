@@ -85,7 +85,7 @@ with tab1:
             st.warning("⚠️ 請先輸入名稱喔！")
 
 # ------------------------------------------
-# 🚪 第二分頁：醫美口碑鋪陳製造機 (保留您的原始版本)
+# 🚪 第二分頁：醫美口碑製造機
 # ------------------------------------------
 with tab2:
     st.info("💡 **操作指南**：透過下方的【互動開關與滑桿】，像疊積木一樣快速組合出專屬的發文者靈魂。")
@@ -98,7 +98,9 @@ with tab2:
     st.markdown("---")
     st.markdown("#### 🎛️ 人設設定")
     
-    # 🌟 使用互動元件代替手動打字
+    # 🌟 修改點 1：把動機情境移到第一項，並永久顯示輸入框
+    urgent_text = st.text_input("🚨 動機及情境 (強烈建議填寫)：", placeholder="例如：快要結婚、前任交新歡、下個月要拍婚紗了，卡粉超嚴重...")
+
     col_p1, col_p2 = st.columns(2)
     with col_p1:
         # 使用選擇滑桿 (Select Slider) 調整金錢觀
@@ -122,22 +124,17 @@ with tab2:
             "Threads 脆友 (句子短、帶有自嘲及厭世感)",
             "PTT 醫美板老手 (講話簡明扼要)", 
         ])
-        
-        # 使用切換開關 (Toggle) 加入急迫情境
-        is_urgent = st.toggle("🚨 加入「動機及情境」(例如：快要結婚、前任交新歡)")
-        urgent_text = ""
-        if is_urgent:
-            urgent_text = st.text_input("👉 請描述原因，越詳細越好：", placeholder="例如：下個月就要拍婚紗了，卡粉超嚴重")
 
     # 🌟 即時動態生成 Prompt 預覽
     st.markdown("##### 👁️ AI 接收到的隱藏人設指令預覽")
     
     # 在背景自動組合這些條件
-    live_prompt = f"1. 金錢觀念：{finance_level}\n"
-    live_prompt += f"2. 痛感承受：{pain_level}\n"
-    live_prompt += f"3. 平台語癖：{platform_style}\n"
-    if is_urgent and urgent_text:
-        live_prompt += f"4. 特殊情境：{urgent_text}，請在內文表現出強烈的焦慮與急迫感。\n"
+    live_prompt = ""
+    if urgent_text.strip():
+        live_prompt += f"👉 特殊情境：{urgent_text}，請在內文表現出強烈的焦慮與急迫感。\n"
+    live_prompt += f"👉 金錢觀念：{finance_level}\n"
+    live_prompt += f"👉 痛感承受：{pain_level}\n"
+    live_prompt += f"👉 平台語癖：{platform_style}\n"
     
     # 用程式碼區塊顯示，看起來很有科技感
     st.code(live_prompt, language="markdown")
@@ -221,7 +218,7 @@ with tab4:
     st.error("🚨 **危機處理主控台**：請將原始負評貼在下方，啟動緊急防守對策。")
     raw_reviews = st.text_area("💬 請貼上網友的「原始負評」內容：", height=150, placeholder="將客訴或抱怨文貼在這裡...")
     
-    if st.button("🚀 啟怒緊急拆彈程序", type="primary", key="btn4"):
+    if st.button("🚀 啟動緊急拆彈程序", type="primary", key="btn4"):
         if raw_reviews:
             with st.spinner("🚨 危機處理專家已連線，正在擬定對策..."):
                 try:
@@ -246,10 +243,10 @@ with tab4:
             st.warning("⚠️ 拆彈模式需要您先貼上原始負評喔！")
 
 # ------------------------------------------
-# 🚪 第五分頁：語氣訓練儀 (🎓 全新加入：內部教育訓練專用)
+# 🚪 第五分頁：文案訓練儀 (教育訓練專用)
 # ------------------------------------------
 with tab5:
-    st.info("💡 **教案模式**：透過隨意操作下方的「開關」與「滑桿」，觀察 AI 是如何一步步疊加維度，從「生硬機器人」進化成「超真實鄉民」。")
+    st.info("💡 **教案模式**：透過隨意調整下方的設定，觀察 AI 是如何一步步疊加維度，從「生硬機器人」進化成「超真實鄉民」。")
     
     st.markdown("#### 🛠️ 1. 設定基礎題材")
     col_t5, col_a5 = st.columns(2)
@@ -260,46 +257,40 @@ with tab5:
 
     st.markdown("#### 🎛️ 2. 操作訓練維度")
     
+    # 🌟 修改點 2：同樣把情境移到第一項，並永久顯示
+    urgent_text_5 = st.text_input("🚨 動機及情境：", value="下個月就要拍婚紗了，卡粉超嚴重", key="u5", help="清空此欄位即代表不加入特殊情境")
+
     col_p5_1, col_p5_2 = st.columns(2)
     with col_p5_1:
-        # 使用選擇滑桿
-        finance_level = st.select_slider(
+        finance_level_5 = st.select_slider(
             "💰 預算與金錢觀設定：",
             options=["(不指定)", "不在乎價格(貴婦)", "預算充足", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
             value="(不指定)",
             key="f5"
         )
-        # 使用下拉選單
-        platform_style = st.selectbox(
+    with col_p5_2:
+        platform_style_5 = st.selectbox(
             "🗣️ 鎖定論壇語氣：",
             ["(不指定)", "Dcard 女孩板 (有較多murmur)", "Threads 脆友 (句子短、帶有自嘲及厭世感)","PTT 醫美板老手 (講話簡明扼要)"],
             key="p5"
         )
-
-    with col_p5_2:
-        # 🌟 使用 st.toggle 開關
-        use_scenario = st.toggle("🚨 加入「動機及情境」", key="tog_s")
-        urgent_text = ""
-        # 只有當開關打開時，才會出現這個輸入框
-        if use_scenario:
-            urgent_text = st.text_input("👉 請描述原因：", value="下個月就要拍婚紗了，卡粉超嚴重", key="u5")
 
     st.divider()
 
     # --- 在背後動態組合送給 AI 的 Prompt ---
     training_prompt = f"你現在是一位常在論壇發文的一般網友。請幫我寫一篇關於「{base_treatment}」的討論短文，並在文中自然帶出「{base_advantage}」的體驗。\n\n"
     training_prompt += "【嚴格指令限制】：\n"
-    training_prompt += "1. 資訊模糊化：絕對不可以完整打出診所名稱或醫師全名。\n"
+    training_prompt += "👉 資訊模糊化：絕對不可以完整打出診所名稱或醫師全名。\n"
 
     has_extra = False
-    if finance_level != "(不指定)":
-        training_prompt += f"2. 金錢觀設定：你的金錢觀是「{finance_level}」，請在文中表現出對應的消費態度與猶豫感。\n"
+    if urgent_text_5.strip():
+        training_prompt += f"👉 情境設定：{urgent_text_5}。請在內文表現出強烈的焦慮與急迫感。\n"
         has_extra = True
-    if platform_style != "(不指定)":
-        training_prompt += f"3. 語氣設定：完全模仿「{platform_style}」的用語習慣與排版格式。\n"
+    if finance_level_5 != "(不指定)":
+        training_prompt += f"👉 金錢觀設定：你的金錢觀是「{finance_level_5}」，請在文中表現出對應的消費態度與猶豫感。\n"
         has_extra = True
-    if use_scenario and urgent_text:
-        training_prompt += f"4. 情境設定：{urgent_text}。請在內文表現出強烈的焦慮與急迫感。\n"
+    if platform_style_5 != "(不指定)":
+        training_prompt += f"👉 語氣設定：完全模仿「{platform_style_5}」的用語習慣與排版格式。\n"
         has_extra = True
 
     if not has_extra:
