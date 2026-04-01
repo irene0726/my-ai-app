@@ -20,7 +20,6 @@ hide_streamlit_style = """
 [data-testid="stToolbar"] {visibility: hidden;}
 [data-testid="stHeader"] {visibility: hidden;}
 footer {visibility: hidden;}
-/* 讓分頁籤的字體稍微放大，增加質感 */
 .stTabs [data-baseweb="tab-list"] {
     gap: 10px;
 }
@@ -84,49 +83,66 @@ with tab1:
             st.warning("⚠️ 請先輸入名稱喔！")
 
 # ------------------------------------------
-# 🚪 第二分頁：醫美口碑鋪陳製造機 (🌟 升級：多維度人設建構器)
+# 🚪 第二分頁：醫美口碑鋪陳製造機 (🌟 升級：互動式人設面板)
 # ------------------------------------------
 with tab2:
-    st.info("💡 **操作指南**：生成去業配感、高真實感的論壇發文與暗樁互動劇本。")
+    st.info("💡 **操作指南**：透過下方的【互動開關與滑桿】，像疊積木一樣快速組合出專屬的發文者靈魂。")
     col_t, col_a = st.columns(2)
     with col_t:
         treatment = st.text_input("💉 療程名稱：", placeholder="例如：法令紋玻尿酸")
     with col_a:
         advantages = st.text_input("✨ 主打優勢：", placeholder="例如：醫師美感自然、無硬塊")
-        
-    st.markdown("##### 🎭 進階人設建構器 (Persona Builder)")
+    
+    st.markdown("---")
+    st.markdown("#### 🎛️ 視覺化人設建構面板")
+    
+    # 🌟 使用互動元件代替手動打字
     col_p1, col_p2 = st.columns(2)
     with col_p1:
-        scenario = st.text_input("🎬 發文動機 (微情境)：", placeholder="例如：下個月拍婚紗發現卡粉、被前男友嫌棄...")
-        financial = st.selectbox("💰 金錢觀與決策邏輯：", [
-            "(不指定)", 
-            "精打細算小資族 (極度在意價格與隱藏費用，追求高CP值)", 
-            "預算有限學生黨 (存錢很久，極度怕失敗浪費錢)", 
-            "高冷理智貴婦 (不在乎錢，只在乎品質、服務細節與隱私)"
-        ])
-    with col_p2:
-        platform_tone = st.selectbox("🗣️ 平台專屬語癖：", [
-            "(不指定)", 
-            "Dcard 女孩板 (愛用 QQ、求打醒、常用空格代替標點符號排版)", 
-            "PTT 醫美板老手 (重視儀器參數、發數，直球對決少廢話)", 
-            "Threads 脆友 (句子短、不愛標點、帶點自嘲與厭世感)"
-        ])
-        extra_notes = st.text_input("✍️ 特殊要求或禁忌 (選填)：", placeholder="例如：一定要抱怨一下諮詢師態度、不要提到保濕...")
+        # 使用選擇滑桿 (Select Slider) 調整金錢觀
+        finance_level = st.select_slider(
+            "💰 預算與金錢觀設定：",
+            options=["不在乎錢(貴婦)", "預算充足", "一般素人", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
+            value="一般素人"
+        )
+        # 使用選擇滑桿調整怕痛程度
+        pain_level = st.select_slider(
+            "😣 痛感承受度設定：",
+            options=["超耐痛(老司機)", "微怕痛", "一般素人", "極度怕痛(小白)"],
+            value="一般素人"
+        )
         
-    if st.button("🚀 生成高真實感口碑劇本", type="primary"):
-        if treatment and advantages:
-            # 將使用者的選擇組合裝訂成超級提示詞
-            actual_persona = ""
-            if scenario: actual_persona += f"- 【發文動機與情境】：{scenario}\n"
-            if financial != "(不指定)": actual_persona += f"- 【金錢觀與決策邏輯】：{financial}\n"
-            if platform_tone != "(不指定)": actual_persona += f"- 【平台語癖與排版】：{platform_tone}\n"
-            if extra_notes: actual_persona += f"- 【特殊要求與禁忌】：{extra_notes}\n"
-            
-            # 如果什麼都沒填，給予防呆預設值
-            if not actual_persona.strip():
-                actual_persona = "- 【綜合設定】：一般真實網友，語氣自然平淡，無特殊偏好。"
+    with col_p2:
+        # 平台語氣下拉選單
+        platform_style = st.selectbox("🗣️ 鎖定論壇語氣：", [
+            "一般真實網用語氣", 
+            "Dcard 女孩板 (愛用QQ、求打醒、空格排版)", 
+            "PTT 醫美板老手 (重視儀器參數、講話直接)", 
+            "Threads 脆友 (句子短、不愛標點、帶有厭世感)"
+        ])
+        
+        # 使用切換開關 (Toggle) 加入急迫情境
+        is_urgent = st.toggle("🚨 加入「急迫焦慮情境」(例如：快要結婚、前任交新歡)")
+        urgent_text = ""
+        if is_urgent:
+            urgent_text = st.text_input("👉 請簡單描述急迫原因：", placeholder="例如：下個月就要拍婚紗了，卡粉超嚴重")
 
-            with st.spinner("✍️ 正在融合多維度人設，植入真實鄉民語氣..."):
+    # 🌟 即時動態生成 Prompt 預覽
+    st.markdown("##### 👁️ AI 接收到的隱藏人設指令預覽")
+    
+    # 在背景自動組合這些條件
+    live_prompt = f"1. 金錢觀念：{finance_level}\n"
+    live_prompt += f"2. 痛感承受：{pain_level}\n"
+    live_prompt += f"3. 平台語癖：{platform_style}\n"
+    if is_urgent and urgent_text:
+        live_prompt += f"4. 特殊情境：{urgent_text}，請在內文表現出強烈的焦慮與急迫感。\n"
+    
+    # 用程式碼區塊顯示，看起來很有科技感
+    st.code(live_prompt, language="markdown")
+        
+    if st.button("🚀 以此人設生成高真實感劇本", type="primary"):
+        if treatment and advantages:
+            with st.spinner("✍️ 正在讀取互動面板參數，植入真實鄉民語氣..."):
                 try:
                     prompt = (
                         f"你是一位擁有 15 年經驗的頂級網路口碑操盤手，專攻台灣醫美論壇。\n"
@@ -136,25 +152,25 @@ with tab2:
                         f"📍 診所/醫師主打優勢：{advantages}\n\n"
                         f"【發文者專屬立體人設】\n"
                         f"請務必嚴格遵循以下多維度人設來調整語氣、排版與內文邏輯：\n"
-                        f"{actual_persona}\n\n"
+                        f"{live_prompt}\n\n"
                         f"【⚠️ 絕對不可違背的『去業配』鐵血指令】\n"
                         "1. 資訊模糊化：主文中【絕對不可以】完整打出診所名稱或醫師全名。\n"
                         "2. 禁用公關用語：嚴禁出現「專業團隊、高CP值、強烈推薦」等行銷詞彙。\n"
                         "3. 植入無傷大雅的抱怨：必須穿插 1~2 個微負評（如：難預約、附近難停車、等太久）。\n"
-                        "4. 強化情緒起伏：根據上述的「發文動機」與「金錢觀」，寫出最真實的焦慮、期待或痛點。\n\n"
+                        "4. 強化情緒起伏：根據上述的「金錢觀」與「特殊情境」，寫出最真實的焦慮、期待或痛點。\n\n"
                         "請提供：\n"
-                        "1. 🎯 平台主文切角與吸睛標題 (提供 3 個)\n"
-                        "2. 📝 主文內容大綱 (必須完美融入設定的人設語癖與排版習慣)\n"
+                        "1. 🎯 平台主文切角與吸睛標題 (Threads、Dcard 各 3 個)\n"
+                        "2. 📝 主文內容大綱 (必須完美融入面板設定的人設語氣與排版)\n"
                         "3. 🗣️ 暗樁推文與蓋樓劇本 (1-5樓推文，需包含中立言論、資訊設計問答、微負評包裝好評)\n"
                         "4. 🛡️ 競品防禦與帶風向話術：如果底下有真實網友留言推薦其他診所，我們的暗樁該用什麼話術自然地把風向帶回來？"
                     )
                     response = model.generate_content(prompt)
-                    st.success("✨ 劇本生成完成！以下是口碑操作企劃：")
+                    st.success("✨ 劇本生成完成！以下是專屬口碑操作企劃：")
                     st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
-            st.warning("⚠️ 請務必填寫「療程名稱」與「主打優勢」喔！")
+            st.warning("⚠️ 請務必填寫上方最基本的「療程名稱」與「主打優勢」喔！")
 
 # ------------------------------------------
 # 🚪 第三分頁：醫美療程彈性大比拼
