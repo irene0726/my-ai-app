@@ -22,6 +22,9 @@ hide_streamlit_style = """
 [data-testid="stHeader"] {visibility: hidden;}
 footer {visibility: hidden;}
 
+/* 徹底隱藏右下角的 Streamlit 官方按鈕/連結 */
+[data-testid="stViewerBadge"] {display: none;}
+
 /* 讓分頁籤的字體稍微放大，增加質感 */
 .stTabs [data-baseweb="tab-list"] {
     gap: 10px;
