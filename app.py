@@ -56,7 +56,7 @@ footer {visibility: hidden;}
 </style>
 
 <div class="custom-watermark">
-    © 2026 Crafted by Szu Chia Huang | Irene
+    © 2026 Crafted by Irene Huang |
 </div>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
