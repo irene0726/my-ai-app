@@ -12,14 +12,16 @@ model = genai.GenerativeModel('gemini-2.5-flash')
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
 
 # ==========================================
-# 🛡️ 隱藏魔法：移除所有 Streamlit 標籤、按鈕與浮水印，打造純淨版面
+# 🛡️ 隱藏魔法 & 👑 專屬個人浮水印
 # ==========================================
 hide_streamlit_style = """
 <style>
+/* 隱藏預設選單與浮水印 */
 #MainMenu {visibility: hidden;}
 [data-testid="stToolbar"] {visibility: hidden;}
 [data-testid="stHeader"] {visibility: hidden;}
 footer {visibility: hidden;}
+
 /* 讓分頁籤的字體稍微放大，增加質感 */
 .stTabs [data-baseweb="tab-list"] {
     gap: 10px;
@@ -29,7 +31,24 @@ footer {visibility: hidden;}
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
+/* 👑 右下角個人專屬浮水印設定 */
+.custom-watermark {
+    position: fixed;
+    bottom: 15px;      /* 距離底部的距離 */
+    right: 20px;       /* 距離右側的距離 (若想放左邊，可改為 left: 20px;) */
+    color: #BBBBBB;    /* 字體顏色，使用淺灰色比較有質感且不干擾閱讀 */
+    font-size: 12px;   /* 字體大小 */
+    font-weight: 500;
+    letter-spacing: 1px;
+    z-index: 100;      /* 確保浮水印永遠在最上層 */
+    user-select: none; /* 防止被反白選取 */
+}
 </style>
+
+<div class="custom-watermark">
+    © 2026 Crafted by 思嘉 | AI 口碑戰情室
+</div>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
