@@ -36,7 +36,7 @@ footer {visibility: hidden;}
 .custom-watermark {
     position: fixed;
     bottom: 15px;      /* 距離底部的距離 */
-    right: 20px;       /* 距離右側的距離 (若想放左邊，可改為 left: 20px;) */
+    left: 20px;       /* 距離右側的距離 (若想放左邊，可改為 left: 20px;) */
     color: #BBBBBB;    /* 字體顏色，使用淺灰色比較有質感且不干擾閱讀 */
     font-size: 12px;   /* 字體大小 */
     font-weight: 500;
