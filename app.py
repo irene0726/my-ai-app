@@ -16,14 +16,20 @@ st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", l
 # ==========================================
 hide_streamlit_style = """
 <style>
-/* 隱藏預設選單與浮水印 */
+/* 隱藏預設選單與頁首頁尾 */
 #MainMenu {visibility: hidden;}
 [data-testid="stToolbar"] {visibility: hidden;}
 [data-testid="stHeader"] {visibility: hidden;}
 footer {visibility: hidden;}
 
-/* 徹底隱藏右下角的 Streamlit 官方按鈕/連結 */
-[data-testid="stViewerBadge"] {display: none;}
+/* 🔨 終極黑魔法：嘗試暴力隱藏所有 Streamlit 官方浮動按鈕 */
+[data-testid="stAppDeployButton"] {display: none !important;}
+[data-testid="manage-app-badge"] {display: none !important;}
+[class^="viewerBadge"] {display: none !important;}
+.viewerBadge_container__1QSob,
+.styles_viewerBadge__1yB5_,
+.viewerBadge_link__1S137,
+.viewerBadge_text__1JaDK {display: none !important;}
 
 /* 讓分頁籤的字體稍微放大，增加質感 */
 .stTabs [data-baseweb="tab-list"] {
@@ -35,17 +41,17 @@ footer {visibility: hidden;}
     padding-bottom: 10px;
 }
 
-/* 👑 右下角個人專屬浮水印設定 */
+/* 👑 左下角個人專屬浮水印設定 */
 .custom-watermark {
     position: fixed;
-    bottom: 15px;      /* 距離底部的距離 */
-    left: 20px;       /* 距離右側的距離 (若想放左邊，可改為 left: 20px;) */
-    color: #BBBBBB;    /* 字體顏色，使用淺灰色比較有質感且不干擾閱讀 */
-    font-size: 12px;   /* 字體大小 */
+    bottom: 15px;      
+    left: 20px;       
+    color: #BBBBBB;    
+    font-size: 12px;   
     font-weight: 500;
     letter-spacing: 1px;
-    z-index: 100;      /* 確保浮水印永遠在最上層 */
-    user-select: none; /* 防止被反白選取 */
+    z-index: 100;      
+    user-select: none; 
 }
 </style>
 
@@ -124,13 +130,11 @@ with tab2:
 
     col_p1, col_p2 = st.columns(2)
     with col_p1:
-        # 🌟 修改點：將「不指定」移到陣列最左邊
         finance_level = st.select_slider(
             "💰 預算與金錢觀設定：",
             options=["不指定", "不在乎價格(貴婦)", "預算充足", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
             value="不指定"
         )
-        # 🌟 修改點：將「不指定」移到陣列最左邊
         pain_level = st.select_slider(
             "😣 痛感承受度設定：",
             options=["不指定", "超耐痛", "微怕痛", "極度怕痛"],
@@ -265,65 +269,4 @@ with tab4:
 # 🚪 第五分頁：文案訓練儀 (教育訓練專用)
 # ------------------------------------------
 with tab5:
-    st.info("💡 **教案模式**：透過隨意調整下方的設定，觀察 AI 是如何一步步疊加維度，從「生硬機器人」進化成「超真實鄉民」。")
-    
-    st.markdown("#### 🛠️ 1. 設定基礎題材")
-    col_t5, col_a5 = st.columns(2)
-    with col_t5:
-        base_treatment = st.text_input("💉 產品/療程：", value="法令紋玻尿酸", key="t5")
-    with col_a5:
-        base_advantage = st.text_input("✨ 主打優勢：", value="醫師美感自然、不推銷", key="a5")
-
-    st.markdown("#### 🎛️ 2. 操作訓練維度")
-    
-    urgent_text_5 = st.text_input("🚨 動機及情境：", value="下個月就要拍婚紗了，卡粉超嚴重", key="u5", help="清空此欄位即代表不加入特殊情境")
-
-    col_p5_1, col_p5_2 = st.columns(2)
-    with col_p5_1:
-        # 🌟 修改點：將「(不指定)」移到陣列最左邊
-        finance_level_5 = st.select_slider(
-            "💰 預算與金錢觀設定：",
-            options=["(不指定)", "不在乎價格(貴婦)", "預算充足", "精打細算(小資)", "極度怕浪費錢(窮學生)"],
-            value="(不指定)",
-            key="f5"
-        )
-    with col_p5_2:
-        platform_style_5 = st.selectbox(
-            "🗣️ 鎖定論壇語氣：",
-            ["(不指定)", "Dcard 女孩板 (有較多murmur)", "Threads 脆友 (句子短、帶有自嘲及厭世感)","PTT 醫美板老手 (講話簡明扼要)"],
-            key="p5"
-        )
-
-    st.divider()
-
-    # --- 在背後動態組合送給 AI 的 Prompt ---
-    training_prompt = f"你現在是一位常在論壇發文的一般網友。請幫我寫一篇關於「{base_treatment}」的討論短文，並在文中自然帶出「{base_advantage}」的體驗。\n\n"
-    training_prompt += "【嚴格指令限制】：\n"
-    training_prompt += "👉 資訊模糊化：絕對不可以完整打出診所名稱或醫師全名。\n"
-
-    has_extra = False
-    if urgent_text_5.strip():
-        training_prompt += f"👉 情境設定：{urgent_text_5}。請在內文表現出強烈的焦慮與急迫感。\n"
-        has_extra = True
-    if finance_level_5 != "(不指定)":
-        training_prompt += f"👉 金錢觀設定：你的金錢觀是「{finance_level_5}」，請在文中表現出對應的消費態度與猶豫感。\n"
-        has_extra = True
-    if platform_style_5 != "(不指定)":
-        training_prompt += f"👉 語氣設定：完全模仿「{platform_style_5}」的用語習慣與排版格式。\n"
-        has_extra = True
-
-    if not has_extra:
-        training_prompt += "👉 綜合設定：使用一般官方、客氣且平淡的推薦語氣即可 (生硬機器人狀態)。\n"
-
-    # --- 顯示即時的 Prompt 讓受訓者學習 ---
-    st.markdown("##### 🔍 觀察送給 AI 的幕後指令變化")
-    st.code(training_prompt, language="markdown")
-    
-    if st.button("🚀 執行訓練測試", type="primary", key="btn5"):
-        with st.spinner("🧠 AI 正在根據維度疊加模擬中..."):
-            try:
-                response = model.generate_content(training_prompt)
-                st.success("✨ 產出結果比對：")
-                st.write(response.text)
-            except Exception as e:
-                st.error(f"發生錯誤：{e}")
+    st.info("💡 **教案模式**：透過隨意調整下方的
