@@ -275,67 +275,64 @@ with tab4:
             st.warning("⚠️ 拆彈模式需要您先貼上原始負評喔！")
 
 # ------------------------------------------
-# 🚪 第五分頁：標題與 SEO 訓練儀 (全新加入 SEO 模組)
+# 🚪 第五分頁：SEO 爆款標題製造機 (🌟 全新演算法優化功能)
 # ------------------------------------------
 with tab5:
-    st.info("💡 **教案模式**：觀察 AI 如何將「情境設定」結合「長尾關鍵字」，產出能上 Google 首頁又具備論壇點擊率的雙效標題。")
+    st.info("💡 **操作指南**：專為 Google 搜尋引擎打造！完美融合「核心關鍵字」與「長尾詞」，讓您的論壇操作文不僅在站內爆紅，更能霸佔 Google 搜尋首頁流量！")
     
-    st.markdown("#### 🛠️ 1. 基礎與人設條件")
-    col_t5, col_a5 = st.columns(2)
-    with col_t5:
-        industry_5 = st.selectbox("🏢 產業類別：", ["醫美", "保健食品",  "牙科", "眼科", "美容美體", "醫療器材", "室內設計", "月子中心","美妝保養"], key="ind5")
-        base_treatment_5 = st.text_input("📦 產品/服務：", value="法令紋玻尿酸", key="t5")
-    with col_a5:
-        urgent_text_5 = st.text_input("🚨 動機及情境：", value="下個月就要拍婚紗了，卡粉超嚴重", key="u5")
-        platform_style_5 = st.selectbox("🗣️ 鎖定論壇語氣：", ["不指定", "Dcard 女孩板", "Threads 脆友","PTT 醫美板老手"], key="p5")
-
-    st.markdown("#### 📈 2. SEO 關鍵字佈局")
+    st.markdown("#### 🔑 1. 設定 SEO 關鍵字佈局")
     col_k1, col_k2 = st.columns(2)
     with col_k1:
-        seo_main_kw = st.text_input("🔑 核心關鍵字 (Target Keyword)：", placeholder="例如：法令紋玻尿酸、老屋翻新...", help="您最希望排上 Google 第一頁的主詞彙。")
+        seo_core_kw = st.text_input("🎯 核心關鍵字 (Target Keyword)：", placeholder="例如：法令紋玻尿酸、娘家大紅麴、老屋翻新...", help="您最希望排上 Google 第一頁的主詞彙。")
     with col_k2:
         seo_long_kw = st.text_input("🔎 長尾關鍵字 (Long-tail Keywords)：", placeholder="例如：費用, 後遺症, 推薦設計師...", help="網友搜尋時常搭配核心關鍵字的字詞，請用逗號分隔。")
 
+    st.markdown("#### 🗣️ 2. 設定網友搜尋意圖")
+    col_i1, col_i2 = st.columns(2)
+    with col_i1:
+        seo_intent = st.selectbox(
+            "🧠 目標受眾想看什麼？ (Search Intent)：",
+            ["精打細算：想找便宜/比價/看費用", 
+             "極度避險：怕踩雷/看失敗心得/問缺點", 
+             "觀望求證：看真實效果/開箱/對比圖",
+             "新手求知：尋求專業知識/原理/懶人包"]
+        )
+    with col_i2:
+        seo_platform = st.selectbox(
+            "📌 預計發布在哪個論壇？ (影響語氣)：",
+            ["Dcard (重視真實感、個人故事)", "PTT (重視專業度、直接破題)", "Mobile01 (重視詳細開箱、圖文)", "部落格/農場文章 (純 SEO 導向)"]
+        )
+
     st.divider()
 
-    # --- 在背後動態組合送給 AI 的 Prompt ---
-    training_prompt = f"你現在是一位兼具「論壇爆文經驗」與「SEO 優化概念」的口碑專家。請針對【{industry_5}】產業的「{base_treatment_5}」撰寫一篇論壇短文。\n\n"
-    
-    training_prompt += "【🎭 第一部分：人設與語氣設定】\n"
-    training_prompt += "👉 資訊模糊化：絕對不可以完整打出診所/公司/品牌名稱。\n"
-    
-    has_extra = False
-    if urgent_text_5.strip():
-        training_prompt += f"👉 情境設定：{urgent_text_5}。請在內文表現出強烈的焦慮與迫切感。\n"
-        has_extra = True
-    if platform_style_5 != "不指定":
-        training_prompt += f"👉 語氣設定：完全模仿「{platform_style_5}」的用語習慣與排版格式。\n"
-        has_extra = True
-    if not has_extra:
-        training_prompt += "👉 綜合設定：使用一般客氣且平淡的推薦語氣即可。\n"
-
-    # 🌟 整合 SEO 條件到 Prompt 中
-    training_prompt += "\n【📈 第二部分：SEO 雙效合一標題設定】\n"
-    if seo_main_kw or seo_long_kw:
-        training_prompt += f"👉 核心搜尋關鍵字：{seo_main_kw if seo_main_kw else '(無)'}\n"
-        training_prompt += f"👉 附屬長尾關鍵字：{seo_long_kw if seo_long_kw else '(無)'}\n"
-        training_prompt += (
-            "任務要求：\n"
-            "1. 請優先產出 3-5 個【雙效合一的標題】。標題前半段必須具備論壇吸睛度（帶情緒、故事感），後半段或副標題位置必須自然置入上述的「核心關鍵字」與「長尾關鍵字」，以利 Google 爬蟲收錄。\n"
-            "2. 正文的撰寫中，請將這些 SEO 關鍵字以「自然不著痕跡」的方式融入鄉民的口吻中，千萬不可像塞字詞的農場文。\n"
-        )
-    else:
-        training_prompt += "👉 未設定特定 SEO 關鍵字，請直接產出符合情境的吸睛論壇標題即可。\n"
-
-    # --- 顯示即時的 Prompt ---
-    st.markdown("##### 🔍 觀察送給 AI 的幕後指令變化")
-    st.code(training_prompt, language="markdown")
-    
-    if st.button("🚀 執行文案與標題測試", type="primary", key="btn5"):
-        with st.spinner("🧠 AI 正在計算關鍵字密度與語氣疊加..."):
-            try:
-                response = model.generate_content(training_prompt)
-                st.success("✨ 產出結果比對：")
-                st.write(response.text)
-            except Exception as e:
-                st.error(f"發生錯誤：{e}")
+    if st.button("🚀 產出 SEO 霸榜標題策略", type="primary", key="btn5"):
+        if seo_core_kw:
+            with st.spinner("🤖 正在模擬 Google 搜尋爬蟲與鄉民點擊心理..."):
+                try:
+                    prompt = (
+                        f"你是一位精通 Google 搜尋引擎演算法與台灣論壇({seo_platform})生態的頂級 SEO 專家及文案大師。\n"
+                        f"我的操作目標是讓文章在 Google 搜尋結果(SERP)上獲得極高的排名，同時具備極高的真人點擊率(CTR)。\n\n"
+                        f"【關鍵字與意圖條件】\n"
+                        f"📍 核心關鍵字：{seo_core_kw}\n"
+                        f"📍 附屬長尾字：{seo_long_kw if seo_long_kw else '無特定'}\n"
+                        f"📍 目標平台：{seo_platform}\n"
+                        f"📍 搜尋意圖：{seo_intent}\n\n"
+                        "【Google SEO 標題黃金法則 (嚴格遵守)】\n"
+                        "1. 字數控制：標題長度需控制在 25~32 個繁體中文字以內，避免在 Google 搜尋結果被截斷。\n"
+                        "2. 關鍵字前置：核心關鍵字【必須】出現在標題前半段，以獲取最高演算法權重。\n"
+                        "3. 符號運用：善用【】、()、數字 (如 2026最新、3大雷區) 等能有效提升 Google 點擊率的視覺符號。\n"
+                        "4. 自然語氣：必須符合目標平台的生態，不能像機器人塞字的農場文。\n\n"
+                        "【請產出以下專業報告】\n"
+                        "請根據上述條件，給我 3 種不同策略的標題組合（每種策略提供 3 個標題選項），並簡述 SEO 佈局原因：\n"
+                        "1. 🔥 平台吸睛爆文款 (帶有情緒、反差或強烈故事性，適合在論壇內引起討論，同時完美埋入關鍵字)\n"
+                        "2. 🛡️ 專業權威防雷款 (主打真實評價、避雷指南、費用解析，直擊網友搜尋意圖痛點)\n"
+                        "3. ❓ 痛點與好奇心解惑款 (以問句出發，吻合網友常在 Google 搜尋框輸入的 QA 句型)\n\n"
+                        "最後，請給我一段簡短的「文章首段開場白建議(約100字)」，示範如何自然地在文章第一段再次帶入核心與長尾關鍵字，以加強全篇 SEO 權重。"
+                    )
+                    response = model.generate_content(prompt)
+                    st.success("✨ 標題策略演算完成！請參考以下 SEO 佈局：")
+                    st.write(response.text)
+                except Exception as e:
+                    st.error(f"發生錯誤：{e}")
+        else:
+            st.warning("⚠️ SEO 操作最基本的就是「核心關鍵字」，請務必填寫喔！")
