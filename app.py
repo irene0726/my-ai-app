@@ -69,13 +69,14 @@ st.markdown("專屬 AI 輿情監測與公關防護主控台")
 st.divider()
 
 # ==========================================
-# 🗂️ 核心功能：精簡為四大萬用分頁
+# 🗂️ 核心功能：精簡為四大萬用分頁 + SEO 訓練儀
 # ==========================================
-tab1, tab2, tab3, tab4 = st.tabs([
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "✅ 產品網路健檢", 
     "🌟 全產業口碑製造機", 
     "⚖️ 競品與服務比較", 
-    "🚨 負評拆彈與攻防"
+    "🚨 負評拆彈與攻防",
+    "📈 標題與 SEO 訓練儀"
 ])
 
 # ------------------------------------------
@@ -112,10 +113,10 @@ with tab1:
             st.warning("⚠️ 請先輸入名稱喔！")
 
 # ------------------------------------------
-# 🚪 第二分頁：全產業口碑製造機 (實戰 + 訓練 二合一)
+# 🚪 第二分頁：全產業口碑製造機
 # ------------------------------------------
 with tab2:
-    st.info("💡 **操作與訓練指南**：設定產業與人設條件，下列方框會即時顯示「AI 詠唱指令」，幫助團隊邊做邊學。")
+    st.info("💡 **操作指南**：設定產業與人設條件，下列方框會即時顯示「AI 詠唱指令」。")
     
     col_ind, col_t, col_a = st.columns([1.5, 2, 2])
     with col_ind:
@@ -137,7 +138,6 @@ with tab2:
             options=["不指定", "不在乎價格(只求最好)", "預算充足", "精打細算(重視CP值)", "預算極度緊繃"],
             value="不指定"
         )
-        # 🌟 升級點：將「痛感」改為全產業通用的「消費者顧慮」
         concern_type = st.selectbox("⚠️ 消費者最大顧慮 (痛點)：", [
             "不指定", 
             "怕沒效果/浪費錢 (保健品/保養品/醫美)",
@@ -156,9 +156,8 @@ with tab2:
             "Mobile01 / FB社團 (圖文並茂詳細開箱、婆媽群聚落)"
         ])
 
-    st.markdown("##### 🧠 幕後 AI 詠唱指令 (教案預覽區)")
+    st.markdown("##### 🧠 幕後 AI 詠唱指令預覽")
     
-    # 組合 Prompt 
     live_prompt = f"👉 目標產業：【{industry}】\n"
     if urgent_text.strip():
         live_prompt += f"👉 特殊情境：{urgent_text}，請在內文中表現出強烈的焦慮或迫切需求。\n"
@@ -205,7 +204,7 @@ with tab2:
             st.warning("⚠️ 請務必填寫上方最基本的「產品/服務名稱」與「主打優勢」喔！")
 
 # ------------------------------------------
-# 🚪 第三分頁：競品與服務比較 (全產業化)
+# 🚪 第三分頁：競品與服務比較
 # ------------------------------------------
 with tab3:
     st.info("💡 **操作指南**：輸入 2 到 4 個選手(產品/服務/醫美儀器皆可)進行對比，系統會自動產出比較表格。")
@@ -274,3 +273,69 @@ with tab4:
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ 拆彈模式需要您先貼上原始負評喔！")
+
+# ------------------------------------------
+# 🚪 第五分頁：標題與 SEO 訓練儀 (全新加入 SEO 模組)
+# ------------------------------------------
+with tab5:
+    st.info("💡 **教案模式**：觀察 AI 如何將「情境設定」結合「長尾關鍵字」，產出能上 Google 首頁又具備論壇點擊率的雙效標題。")
+    
+    st.markdown("#### 🛠️ 1. 基礎與人設條件")
+    col_t5, col_a5 = st.columns(2)
+    with col_t5:
+        industry_5 = st.selectbox("🏢 產業類別：", ["醫美", "保健食品",  "牙科", "眼科", "美容美體", "醫療器材", "室內設計", "月子中心","美妝保養"], key="ind5")
+        base_treatment_5 = st.text_input("📦 產品/服務：", value="法令紋玻尿酸", key="t5")
+    with col_a5:
+        urgent_text_5 = st.text_input("🚨 動機及情境：", value="下個月就要拍婚紗了，卡粉超嚴重", key="u5")
+        platform_style_5 = st.selectbox("🗣️ 鎖定論壇語氣：", ["不指定", "Dcard 女孩板", "Threads 脆友","PTT 醫美板老手"], key="p5")
+
+    st.markdown("#### 📈 2. SEO 關鍵字佈局")
+    col_k1, col_k2 = st.columns(2)
+    with col_k1:
+        seo_main_kw = st.text_input("🔑 核心關鍵字 (Target Keyword)：", placeholder="例如：法令紋玻尿酸、老屋翻新...", help="您最希望排上 Google 第一頁的主詞彙。")
+    with col_k2:
+        seo_long_kw = st.text_input("🔎 長尾關鍵字 (Long-tail Keywords)：", placeholder="例如：費用, 後遺症, 推薦設計師...", help="網友搜尋時常搭配核心關鍵字的字詞，請用逗號分隔。")
+
+    st.divider()
+
+    # --- 在背後動態組合送給 AI 的 Prompt ---
+    training_prompt = f"你現在是一位兼具「論壇爆文經驗」與「SEO 優化概念」的口碑專家。請針對【{industry_5}】產業的「{base_treatment_5}」撰寫一篇論壇短文。\n\n"
+    
+    training_prompt += "【🎭 第一部分：人設與語氣設定】\n"
+    training_prompt += "👉 資訊模糊化：絕對不可以完整打出診所/公司/品牌名稱。\n"
+    
+    has_extra = False
+    if urgent_text_5.strip():
+        training_prompt += f"👉 情境設定：{urgent_text_5}。請在內文表現出強烈的焦慮與迫切感。\n"
+        has_extra = True
+    if platform_style_5 != "不指定":
+        training_prompt += f"👉 語氣設定：完全模仿「{platform_style_5}」的用語習慣與排版格式。\n"
+        has_extra = True
+    if not has_extra:
+        training_prompt += "👉 綜合設定：使用一般客氣且平淡的推薦語氣即可。\n"
+
+    # 🌟 整合 SEO 條件到 Prompt 中
+    training_prompt += "\n【📈 第二部分：SEO 雙效合一標題設定】\n"
+    if seo_main_kw or seo_long_kw:
+        training_prompt += f"👉 核心搜尋關鍵字：{seo_main_kw if seo_main_kw else '(無)'}\n"
+        training_prompt += f"👉 附屬長尾關鍵字：{seo_long_kw if seo_long_kw else '(無)'}\n"
+        training_prompt += (
+            "任務要求：\n"
+            "1. 請優先產出 3-5 個【雙效合一的標題】。標題前半段必須具備論壇吸睛度（帶情緒、故事感），後半段或副標題位置必須自然置入上述的「核心關鍵字」與「長尾關鍵字」，以利 Google 爬蟲收錄。\n"
+            "2. 正文的撰寫中，請將這些 SEO 關鍵字以「自然不著痕跡」的方式融入鄉民的口吻中，千萬不可像塞字詞的農場文。\n"
+        )
+    else:
+        training_prompt += "👉 未設定特定 SEO 關鍵字，請直接產出符合情境的吸睛論壇標題即可。\n"
+
+    # --- 顯示即時的 Prompt ---
+    st.markdown("##### 🔍 觀察送給 AI 的幕後指令變化")
+    st.code(training_prompt, language="markdown")
+    
+    if st.button("🚀 執行文案與標題測試", type="primary", key="btn5"):
+        with st.spinner("🧠 AI 正在計算關鍵字密度與語氣疊加..."):
+            try:
+                response = model.generate_content(training_prompt)
+                st.success("✨ 產出結果比對：")
+                st.write(response.text)
+            except Exception as e:
+                st.error(f"發生錯誤：{e}")
