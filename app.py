@@ -226,7 +226,7 @@ with tab3:
             with st.spinner(f"🥊 正在為您跨界對比 {items_str} ..."):
                 try:
                     prompt = (
-                        f"你是一位專業且中立的資深產業分析師，深諳台灣各大網路論壇(Threads、Dcard、PTT)的真實風向。\n"
+                        f"你是一位專業且中立的資深產業分析師，深諳台灣各大網路論壇(Threads、Dcard、PTT、Mobile01)的真實風向。\n"
                         f"請幫我深度比較以下項目：{items_str}。\n\n"
                         "報告必須包含以下模塊，並使用 Markdown 表格呈現對比：\n"
                         "1. 🔬 核心差異白話文解釋：這幾者在成分、技術或服務本質上的關鍵差異。\n"
