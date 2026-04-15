@@ -300,7 +300,7 @@ with tab5:
     with col_i2:
         seo_platform = st.selectbox(
             "📌 預計發布在哪個論壇？ (影響語氣)：",
-            ["Dcard (重視真實感、個人故事)", "PTT (重視專業度、直接破題)", "Mobile01 (重視詳細開箱、圖文)", "部落格/農場文章 (純 SEO 導向)"]
+            ["Dcard (重視真實感、個人故事)", "PTT (重視專業度、直接破題)", "Mobile01 (重視詳細開箱、圖文)", "母嬰論壇 (純 SEO 導向)"]
         )
 
     st.divider()
