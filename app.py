@@ -5,8 +5,8 @@ import google.generativeai as genai
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
 
-# 2. 👉 降級成 1.5 版本，享受每天 1500 次免費高額度！
-model = genai.GenerativeModel('gemini-1.5-flash')
+# 2. 使用最新 2.5 版本模型
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 # --- 網頁前端介面設計 ---
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
@@ -337,3 +337,5 @@ with tab5:
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ SEO 操作最基本的就是「核心關鍵字」，請務必填寫喔！")
+
+
