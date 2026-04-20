@@ -12,6 +12,24 @@ model = genai.GenerativeModel('gemini-2.5-flash')
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
 
 # ==========================================
+# 🔐 網頁密碼門系統
+# ==========================================
+if "password_correct" not in st.session_state:
+    st.session_state["password_correct"] = False
+
+def check_password():
+    if st.session_state["password"] == st.secrets["APP_PASSWORD"]:
+        st.session_state["password_correct"] = True
+    else:
+        st.error("🚫 密碼錯誤！請確認您是內部團隊成員。")
+
+if not st.session_state["password_correct"]:
+    st.markdown("### 🔒 系統已上鎖")
+    st.text_input("請輸入內部通關密碼以啟用系統：", type="password", key="password")
+    st.button("登入", on_click=check_password)
+    st.stop()  # 🌟 這行超級重要！密碼沒過的話，程式就停在這裡，絕對不會載入下面的 AI 系統！
+
+# ==========================================
 # 🛡️ 隱藏魔法 & 👑 專屬個人浮水印
 # ==========================================
 hide_streamlit_style = """
