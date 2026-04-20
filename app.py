@@ -6,7 +6,7 @@ GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 2. 👉 降級成 1.5 版本，享受每天 1500 次免費高額度！
-model = genai.GenerativeModel('gemini-1.5-flash')
+model = genai.GenerativeModel('gemini-1.5-flash-latest')
 
 # --- 網頁前端介面設計 ---
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
