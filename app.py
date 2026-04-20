@@ -4,6 +4,7 @@ import google.generativeai as genai
 # 1. 呼叫雲端保險箱裡的金鑰
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
+APP_PASSWORD = "booyah2026"  # 您可以改成任何團隊專屬密碼
 
 # 2. 使用最新 2.5 版本模型
 model = genai.GenerativeModel('gemini-2.5-flash')
