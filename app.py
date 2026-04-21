@@ -1,5 +1,8 @@
 import streamlit as st
 import google.generativeai as genai
+import pandas as pd  # 👉 新增這行：用來處理表格與匯出檔案
+import io            # 👉 新增這行：用來讀取 AI 產出的文字資料
+
 
 # 1. 呼叫雲端保險箱裡的金鑰
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
