@@ -285,7 +285,7 @@ with tab5:
     with col_k1:
         seo_core_kw = st.text_input("🎯 核心關鍵字：", placeholder="例：法令紋玻尿酸", help="您最希望排上 Google 第一頁的主詞彙。")
     with col_k2:
-        seo_long_kw = st.text_input("🔎 核心長尾詞：", placeholder="例：費用, 後遺症, 評價", help="網友搜尋時常搭配核心關鍵字的痛點字詞。")
+        seo_long_kw = st.text_input("🔎 長尾關鍵字：", placeholder="例：費用, 後遺症, 評價", help="網友搜尋時常搭配核心關鍵字的痛點字詞。")
     with col_k3:
         seo_lsi_kw = st.text_input("🕸️ LSI 關聯詞 (選填)：", placeholder="例：cc數, 凹陷, 補骨", help="與主題高度相關的專業詞彙，能大幅提升 Google 語意權重。")
 
