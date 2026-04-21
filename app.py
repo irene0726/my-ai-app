@@ -275,17 +275,19 @@ with tab4:
             st.warning("⚠️ 拆彈模式需要您先貼上原始負評喔！")
 
 # ------------------------------------------
-# 🚪 第五分頁：SEO 素人標題製造機 (🌟 真實提問/分享無痕版)
+# 🚪 第五分頁：SEO 素人標題製造機 (🌟 演算法霸榜優化版)
 # ------------------------------------------
 with tab5:
-    st.info("💡 **操作指南**：輸入關鍵字並選擇「請益」或「分享」，系統會自動將 SEO 關鍵字『無痕』融入最自然的素人標題中，讓文章具備高點擊率且不著痕跡！")
+    st.info("💡 **高階 SEO 模式**：導入 E-E-A-T 真實經驗原則與 LSI 語意關聯。產出的標題將兼具「鄉民高點擊率」與「Google 爬蟲高權重」。")
     
-    st.markdown("#### 🔑 1. 設定 SEO 關鍵字佈局")
-    col_k1, col_k2 = st.columns(2)
+    st.markdown("#### 🔑 1. 設定 SEO 關鍵字矩陣 (Keyword Matrix)")
+    col_k1, col_k2, col_k3 = st.columns(3)
     with col_k1:
-        seo_core_kw = st.text_input("🎯 核心關鍵字 (Target Keyword)：", placeholder="例如：法令紋玻尿酸、室內設計推薦...", help="您最希望排上 Google 第一頁的主詞彙。")
+        seo_core_kw = st.text_input("🎯 核心關鍵字：", placeholder="例：法令紋玻尿酸", help="您最希望排上 Google 第一頁的主詞彙。")
     with col_k2:
-        seo_long_kw = st.text_input("🔎 長尾關鍵字 (Long-tail Keywords)：", placeholder="例如：費用, 後遺症, 評價...", help="網友搜尋時常搭配核心關鍵字的字詞，請用逗號分隔。")
+        seo_long_kw = st.text_input("🔎 核心長尾詞：", placeholder="例：費用, 後遺症, 評價", help="網友搜尋時常搭配核心關鍵字的痛點字詞。")
+    with col_k3:
+        seo_lsi_kw = st.text_input("🕸️ LSI 關聯詞 (選填)：", placeholder="例：cc數, 凹陷, 補骨", help="與主題高度相關的專業詞彙，能大幅提升 Google 語意權重。")
 
     st.markdown("#### 🗣️ 2. 設定文章類型與意圖")
     col_i1, col_i2 = st.columns(2)
@@ -298,44 +300,45 @@ with tab5:
     with col_i2:
         seo_intent = st.selectbox(
             "🧠 網友搜尋這些字的意圖是？",
-            ["想找便宜/比價/看費用", 
-             "怕踩雷/看失敗心得/問缺點", 
-             "看真實效果/開箱/對比圖",
-             "單純收集名單/求推薦"]
+            ["精打細算：想找便宜/比價/看費用", 
+             "極度避險：怕踩雷/看失敗心得/問缺點", 
+             "觀望求證：看真實效果/開箱/對比圖",
+             "新手求知：尋求專業知識/原理/懶人包"]
         )
 
     st.divider()
 
-    if st.button("🚀 產出無業配感 SEO 標題", type="primary", key="btn5"):
+    if st.button("🚀 演算 Google 演算法霸榜標題", type="primary", key="btn5"):
         if seo_core_kw:
-            with st.spinner("🤖 正在演算最自然的素人標題與搜尋邏輯..."):
+            with st.spinner("🤖 正在對接 Google 搜尋意圖與 E-E-A-T 原則..."):
                 try:
                     prompt = (
-                        f"你是一位精通 Google 搜尋演算法與台灣論壇(Dcard、PTT、Mobile01)生態的資深素人口碑操盤手。\n"
-                        f"操作目標：產出極度自然、完全沒有業配感，但又能完美吻合 Google 搜尋爬蟲胃口的「素人論壇標題」。\n\n"
-                        f"【操作條件】\n"
+                        f"你是一位精通 Google 搜尋演算法 (特別是 E-E-A-T 原則與 2024 核心更新) 以及台灣論壇生態的頂級 SEO 專家。\n"
+                        f"操作目標：產出極度自然、完全沒有業配感，但又能完美吻合 Google 搜尋爬蟲語意邏輯的「素人論壇標題」。\n\n"
+                        f"【SEO 關鍵字矩陣】\n"
                         f"📍 核心關鍵字：{seo_core_kw}\n"
-                        f"📍 附屬長尾字：{seo_long_kw if seo_long_kw else '無特定'}\n"
+                        f"📍 核心長尾字：{seo_long_kw if seo_long_kw else '無特定'}\n"
+                        f"📍 LSI 語意關聯詞：{seo_lsi_kw if seo_lsi_kw else '無特定'}\n\n"
+                        f"【文章架構設定】\n"
                         f"📍 文章類型：{post_type}\n"
-                        f"📍 搜尋意圖：{seo_intent}\n\n"
-                        "【⚠️ 絕對不可違背的『去農場化』鐵血指令】\n"
-                        "1. 嚴禁農場標題：絕對不可出現「2026最新」、「必看」、「大公開」、「驚呆了」等吸睛字眼。\n"
-                        "2. 嚴禁濫用符號：不要在標題使用過多 【】、🔥、✨ 等圖案，請模仿一般網友用手機快速打字的隨性習慣，頂多使用單純的空格、逗號或問號。\n"
-                        "3. 隱藏操作痕跡：如果選擇「請益文」，標題必須是真的像在發問（例如：XXX費用大概多少？有後遺症嗎？求推薦）；如果是「分享文」，語氣要平淡甚至帶點微抱怨（例如：終於去做了XXX，分享一下真實心得）。\n"
-                        "4. 關鍵字自然融入：將核心與長尾字順暢地安插在標題中，絕不能像硬塞字詞的廣告文。\n\n"
+                        f"📍 搜尋意圖 (Search Intent)：{seo_intent}\n\n"
+                        "【🏆 Google 演算法高權重標題公式 (嚴格遵守)】\n"
+                        "1. 雙層次結構：標題必須包含「情緒/情境引導 (給人看)」與「精準關鍵字 (給 Google 看)」。\n"
+                        "2. 長度控制：控制在 25-32 個繁體中文字，確保在 Google 搜尋結果頁 (SERP) 不會被截斷。\n"
+                        "3. 展現真實經驗 (E-E-A-T 中的 Experience)：Google 極度偏好『第一手經驗』。請在標題中自然流露出『親身經歷』或『真實困擾』的語氣。\n"
+                        "4. 絕對去農場化：禁用「2026最新」、「必看」、「大公開」。使用論壇真實語氣（可適度包含空格、逗號或問號）。\n\n"
                         "【請產出以下內容】\n"
-                        "我「只需要」標題與搜尋邏輯分析。請給我 5 個最完美的標題選項。\n"
+                        "請給我 5 個符合上述高階 SEO 邏輯的完美標題選項。\n"
                         "格式請完全依照以下呈現：\n\n"
                         "🔹 標題 1：[產出的素人自然標題]\n"
-                        "   └ 📈 SEO與搜尋邏輯分析：[簡述為何這個標題能被 Google 收錄，且網友看不出是刻意操作]\n\n"
+                        "   ├ 💡 點擊心理學：[簡述這個標題為何能吸引鄉民點擊]\n"
+                        "   └ 📈 Google 演算法視角：[解析這個標題抓住了哪些 LSI 語意，以及為何能滿足設定的搜尋意圖]\n\n"
                         "(以此類推，產出 5 個選項)"
                     )
                     response = model.generate_content(prompt)
-                    st.success("✨ 演算完成！請參考以下最自然的 SEO 標題佈局：")
+                    st.success("✨ 演算完成！請參考以下 E-E-A-T 高權重標題佈局：")
                     st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ SEO 操作最基本的就是「核心關鍵字」，請務必填寫喔！")
-
-
