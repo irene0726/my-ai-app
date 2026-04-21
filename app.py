@@ -71,14 +71,15 @@ st.divider()
 # ==========================================
 # 🗂️ 核心功能：精簡為四大萬用分頁 + SEO 訓練儀
 # ==========================================
-tab1, tab2, tab3, tab4, tab5, tab6 , tab7= st.tabs([
+tab1, tab2, tab3, tab4, tab5, tab6 , tab7, tab8= st.tabs([
     "✅ 產品網路健檢", 
     "🌟 全產業口碑製造機", 
     "⚖️ 競品與服務比較", 
     "🚨 負評拆彈與攻防",
     "📈 標題與 SEO 訓練儀",
     "🧵 Threads 爆文潤飾",
-    "🔥 熱點流量請益文"
+    "🔥 熱點流量請益文",
+    "🪖 水軍多重宇宙矩陣"
 ])
 
 # ------------------------------------------
@@ -469,3 +470,87 @@ with tab7:
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ 必須同時填寫「熱門話題」與「客戶類型」，AI 才能幫您找出完美的牽拖邏輯喔！")
+
+# ------------------------------------------
+# 🚪 第八分頁：水軍多重宇宙矩陣 (🪖 批次留言生成器)
+# ------------------------------------------
+with tab8:
+    st.info("🪖 **水軍多重宇宙矩陣**：輸入主文與帶風向目標，AI 將自動生成 20 則不同人設的留言，並支援一鍵匯出 Excel，方便執行團隊照表操課。")
+    
+    st.markdown("#### 📝 1. 設定戰場與主貼文")
+    col_w1, col_w2 = st.columns(2)
+    with col_w1:
+        target_platform = st.selectbox(
+            "📍 目標論壇平台：",
+            ["Dcard (大學生/新鮮人，愛用心境描述)", "PTT (鄉民老手，講話直接/微酸)", "Threads (脆友，句子短/愛用破折號)"]
+        )
+    with col_w2:
+        wom_goal = st.text_input(
+            "🎯 這串留言的最終帶風向目標是？", 
+            placeholder="例如：引導大家覺得『某產品雖然貴但很值得』，或是『把這家診所的醫生捧成神』"
+        )
+        
+    main_post_content = st.text_area(
+        "📄 請貼上準備發布的「主貼文內容」或「討論主題」：",
+        height=150,
+        placeholder="把前面分頁寫好的主文草稿貼過來，AI 才知道底下要怎麼回覆..."
+    )
+
+    st.divider()
+
+    if st.button("🚀 召喚水軍矩陣 (產出 20 則留言)", type="primary", key="btn8"):
+        if main_post_content and wom_goal:
+            with st.spinner("🤖 正在切換 20 種不同的人格分裂，生成矩陣中..."):
+                try:
+                    prompt = (
+                        f"你是一位擁有豐富論壇操作經驗的網軍頭子。現在請根據以下【主貼文】，產出 20 則極度逼真的網友留言，並巧妙地達成【帶風向目標】。\n\n"
+                        f"📍 目標平台：{target_platform}\n"
+                        f"📍 帶風向目標：{wom_goal}\n"
+                        f"📍 主貼文內容：{main_post_content}\n\n"
+                        "【🏆 水軍矩陣比例與人設規則】\n"
+                        "你需要模擬出一個真實討論串的生態，這 20 則留言必須包含以下比例的人設，不能全部都在稱讚（那樣太假）：\n"
+                        "1. 伸手牌發問 (約 25%)：單純發問費用、地點、痛不痛、去哪買。\n"
+                        "2. 中立觀望與純推 (約 30%)：路過推個、卡一個等心得、感覺不錯但還在猶豫。\n"
+                        "3. 微酸質疑或抱怨競品 (約 15%)：提出合理的擔憂（如：這看起來很痛欸、可是另一家比較便宜），讓後面的暗樁有機會反駁。\n"
+                        "4. 深度護航與推坑 (約 30%)：詳細分享真實經驗，用親身經歷來達成我們的【帶風向目標】。用語必須去業配感。\n\n"
+                        "【⚠️ 輸出格式限制 (極度重要)】\n"
+                        "請嚴格使用 CSV 格式輸出，並且使用 `|` 作為分隔符號（不要用逗號，因為留言內容會有很多逗號）。\n"
+                        "第一行必須是標題欄位，包含以下 4 個欄位：\n"
+                        "樓層|水軍人設屬性|留言內容|戰術目的\n\n"
+                        "範例：\n"
+                        "1樓|伸手牌發問|請問原PO這家在哪裡？費用大概多少？|製造詢問熱度，讓暗樁在下一樓解答\n"
+                        "2樓|微酸質疑|這價格我寧願去打鳳凰電波吧...|故意拋出質疑，做球給後面的護航大軍\n"
+                        "3樓|深度護航|我上個月才去！真心覺得不會痛，而且醫生超溫柔推推|針對2樓的質疑進行平衡，達成帶風向目標\n"
+                        "(請完整產出 20 樓，不要輸出任何 CSV 以外的廢話與解釋)"
+                    )
+                    
+                    response = model.generate_content(prompt)
+                    
+                    # 處理 AI 產出的文字，去除可能附帶的 Markdown 標記
+                    raw_data = response.text.replace('```csv', '').replace('```', '').strip()
+                    
+                    # 嘗試將資料讀取為 DataFrame
+                    try:
+                        df = pd.read_csv(io.StringIO(raw_data), sep='|')
+                        
+                        st.success("✨ 水軍矩陣集結完畢！您可以直接複製，或下載成 Excel 檔交給執行團隊。")
+                        
+                        # 在網頁上展示精美的表格
+                        st.dataframe(df, use_container_width=True, hide_index=True)
+                        
+                        # 製作下載按鈕 (使用 utf-8-sig 確保 Excel 打開中文不會亂碼)
+                        csv = df.to_csv(index=False).encode('utf-8-sig')
+                        st.download_button(
+                            label="📥 下載水軍劇本 (Excel CSV 格式)",
+                            data=csv,
+                            file_name='wom_matrix_script.csv',
+                            mime='text/csv',
+                        )
+                    except Exception as parse_error:
+                        st.error("⚠️ 資料解析失敗，AI 產出的格式不符預期，請重新生成一次。")
+                        st.text(raw_data) # 如果解析失敗，還是把原始文字吐出來給您看
+                        
+                except Exception as e:
+                    st.error(f"發生錯誤：{e}")
+        else:
+            st.warning("⚠️ 請填寫「帶風向目標」與「主貼文內容」，將軍才能開始排兵布陣喔！")
