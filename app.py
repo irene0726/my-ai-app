@@ -424,9 +424,9 @@ with tab7:
     platform_vibe = st.selectbox(
         "🗣️ 發文平台語氣設定：",
         [
+            "Threads 脆友 (字少、情緒化、直接拋問題)",
             "Dcard 閒聊板/女孩板 (生活化、愛用心境描述、求推薦)", 
-            "PTT 八卦板/WomenTalk (直白、微酸、尋求實用建議)", 
-            "Threads 脆友 (字少、情緒化、直接拋問題)"
+            "PTT 八卦板/WomenTalk (直白、微酸、尋求實用建議)"
         ]
     )
 
