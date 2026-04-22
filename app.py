@@ -1,8 +1,8 @@
 import streamlit as st
 import google.generativeai as genai
-import pandas as pd  # 👉 新增這行：用來處理表格與匯出檔案
-import io            # 👉 新增這行：用來讀取 AI 產出的文字資料
-
+import pandas as pd
+import io
+import json
 
 # 1. 呼叫雲端保險箱裡的金鑰
 GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
@@ -485,7 +485,7 @@ with tab8:
     with col_w1:
         target_platform = st.selectbox(
             "📍 目標論壇平台：",
-            ["Dcard (大學生/新鮮人，愛用心境描述)", "PTT (鄉民老手，講話直接/微酸)", "Threads (脆友，句子短/愛用破折號)"]
+            ["Threads (脆友，句子短/愛用破折號)","Dcard (大學生/新鮮人，愛用心境描述)", "PTT (鄉民老手，講話直接/微酸)"]
         )
     with col_w2:
         wom_goal = st.text_input(
@@ -501,12 +501,12 @@ with tab8:
 
     st.divider()
 
-    if st.button("🚀 召喚水軍矩陣 (產出 20 則留言)", type="primary", key="btn8"):
+if st.button("🚀 召喚水軍矩陣 (產出 20 則留言)", type="primary", key="btn8"):
         if main_post_content and wom_goal:
             with st.spinner("🤖 正在切換 20 種不同的人格分裂，生成矩陣中..."):
                 try:
                     prompt = (
-                        f"你是一位擁有豐富論壇操作經驗的網軍頭子。現在請根據以下【主貼文】，產出 20 則極度逼真的網友留言，並巧妙地達成【帶風向目標】。\n\n"
+                        f"你是一位擁有15年豐富論壇操作經驗的口碑行銷資深專員。現在請根據以下【主貼文】，產出 20 則極度逼真的網友留言，並巧妙地達成【帶風向目標】。\n\n"
                         f"📍 目標平台：{target_platform}\n"
                         f"📍 帶風向目標：{wom_goal}\n"
                         f"📍 主貼文內容：{main_post_content}\n\n"
@@ -517,43 +517,48 @@ with tab8:
                         "3. 微酸質疑或抱怨競品 (約 15%)：提出合理的擔憂（如：這看起來很痛欸、可是另一家比較便宜），讓後面的暗樁有機會反駁。\n"
                         "4. 深度護航與推坑 (約 30%)：詳細分享真實經驗，用親身經歷來達成我們的【帶風向目標】。用語必須去業配感。\n\n"
                         "【⚠️ 輸出格式限制 (極度重要)】\n"
-                        "請嚴格使用 CSV 格式輸出，並且使用 `|` 作為分隔符號（不要用逗號，因為留言內容會有很多逗號）。\n"
-                        "第一行必須是標題欄位，包含以下 4 個欄位：\n"
-                        "樓層|水軍人設屬性|留言內容|戰術目的\n\n"
-                        "範例：\n"
-                        "1樓|伸手牌發問|請問原PO這家在哪裡？費用大概多少？|製造詢問熱度，讓暗樁在下一樓解答\n"
-                        "2樓|微酸質疑|這價格我寧願去打鳳凰電波吧...|故意拋出質疑，做球給後面的護航大軍\n"
-                        "3樓|深度護航|我上個月才去！真心覺得不會痛，而且醫生超溫柔推推|針對2樓的質疑進行平衡，達成帶風向目標\n"
-                        "(請完整產出 20 樓，不要輸出任何 CSV 以外的廢話與解釋)"
+                        "請嚴格使用 JSON Array 格式輸出。絕對不要包含任何 Markdown 標記 (如 ```json)、不要表格、不要任何解釋與廢話。\n"
+                        "請直接給出像這樣的純 JSON 陣列格式：\n"
+                        "[\n"
+                        "  {\"樓層\": \"1樓\", \"人設屬性\": \"伸手牌發問\", \"留言內容\": \"請問原PO這家在哪裡？費用大概多少？\", \"戰術目的\": \"製造詢問熱度\"},\n"
+                        "  {\"樓層\": \"2樓\", \"人設屬性\": \"微酸質疑\", \"留言內容\": \"這價格我寧願去打鳳凰電波吧...\", \"戰術目的\": \"故意拋出質疑做球給後續護航\"}\n"
+                        "]"
                     )
                     
                     response = model.generate_content(prompt)
                     
-                    # 處理 AI 產出的文字，去除可能附帶的 Markdown 標記
-                    raw_data = response.text.replace('```csv', '').replace('```', '').strip()
+                    # 🧹 黑魔法：精準擷取 JSON 字串，過濾掉 AI 的廢話
+                    raw_text = response.text
+                    start_idx = raw_text.find('[')
+                    end_idx = raw_text.rfind(']') + 1
                     
-                    # 嘗試將資料讀取為 DataFrame
-                    try:
-                        df = pd.read_csv(io.StringIO(raw_data), sep='|')
+                    if start_idx != -1 and end_idx != -1:
+                        clean_json_str = raw_text[start_idx:end_idx]
                         
-                        st.success("✨ 水軍矩陣集結完畢！您可以直接複製，或下載成 Excel 檔交給執行團隊。")
-                        
-                        # 在網頁上展示精美的表格
-                        st.dataframe(df, use_container_width=True, hide_index=True)
-                        
-                        # 製作下載按鈕 (使用 utf-8-sig 確保 Excel 打開中文不會亂碼)
-                        csv = df.to_csv(index=False).encode('utf-8-sig')
-                        st.download_button(
-                            label="📥 下載水軍劇本 (Excel CSV 格式)",
-                            data=csv,
-                            file_name='wom_matrix_script.csv',
-                            mime='text/csv',
-                        )
-                    except Exception as parse_error:
-                        st.error("⚠️ 資料解析失敗，AI 產出的格式不符預期，請重新生成一次。")
-                        st.text(raw_data) # 如果解析失敗，還是把原始文字吐出來給您看
+                        try:
+                            # 嘗試將 JSON 轉換為 DataFrame
+                            data = json.loads(clean_json_str)
+                            df = pd.DataFrame(data)
+                            
+                            st.success("✨ 水軍矩陣集結完畢！您可以直接複製，或下載成 Excel 檔交給執行團隊。")
+                            
+                            # 在網頁上展示精美的表格
+                            st.dataframe(df, use_container_width=True, hide_index=True)
+                            
+                            # 製作下載按鈕 (使用 utf-8-sig 確保 Excel 打開中文不會亂碼)
+                            csv = df.to_csv(index=False).encode('utf-8-sig')
+                            st.download_button(
+                                label="📥 下載水軍劇本 (Excel CSV 格式)",
+                                data=csv,
+                                file_name='wom_matrix_script.csv',
+                                mime='text/csv',
+                            )
+                        except json.JSONDecodeError:
+                            st.error("⚠️ 資料解析失敗：AI 產出的 JSON 格式有語法錯誤。")
+                            st.text(clean_json_str) # 吐出錯誤的字串讓您檢查
+                    else:
+                        st.error("⚠️ 資料解析失敗：AI 未輸出預期的陣列格式。")
+                        st.text(raw_text)
                         
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
-        else:
-            st.warning("⚠️ 請填寫「帶風向目標」與「主貼文內容」，將軍才能開始排兵布陣喔！")
