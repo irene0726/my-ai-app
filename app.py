@@ -501,64 +501,64 @@ with tab8:
 
     st.divider()
 
-if st.button("🚀 召喚水軍矩陣 (產出 20 則留言)", type="primary", key="btn8"):
-        if main_post_content and wom_goal:
-            with st.spinner("🤖 正在切換 20 種不同的人格分裂，生成矩陣中..."):
-                try:
-                    prompt = (
-                        f"你是一位擁有15年豐富論壇操作經驗的口碑行銷資深專員。現在請根據以下【主貼文】，產出 20 則極度逼真的網友留言，並巧妙地達成【帶風向目標】。\n\n"
-                        f"📍 目標平台：{target_platform}\n"
-                        f"📍 帶風向目標：{wom_goal}\n"
-                        f"📍 主貼文內容：{main_post_content}\n\n"
-                        "【🏆 水軍矩陣比例與人設規則】\n"
-                        "你需要模擬出一個真實討論串的生態，這 20 則留言必須包含以下比例的人設，不能全部都在稱讚（那樣太假）：\n"
-                        "1. 伸手牌發問 (約 25%)：單純發問費用、地點、痛不痛、去哪買。\n"
-                        "2. 中立觀望與純推 (約 30%)：路過推個、卡一個等心得、感覺不錯但還在猶豫。\n"
-                        "3. 微酸質疑或抱怨競品 (約 15%)：提出合理的擔憂（如：這看起來很痛欸、可是另一家比較便宜），讓後面的暗樁有機會反駁。\n"
-                        "4. 深度護航與推坑 (約 30%)：詳細分享真實經驗，用親身經歷來達成我們的【帶風向目標】。用語必須去業配感。\n\n"
-                        "【⚠️ 輸出格式限制 (極度重要)】\n"
-                        "請嚴格使用 JSON Array 格式輸出。絕對不要包含任何 Markdown 標記 (如 ```json)、不要表格、不要任何解釋與廢話。\n"
-                        "請直接給出像這樣的純 JSON 陣列格式：\n"
-                        "[\n"
-                        "  {\"樓層\": \"1樓\", \"人設屬性\": \"伸手牌發問\", \"留言內容\": \"請問原PO這家在哪裡？費用大概多少？\", \"戰術目的\": \"製造詢問熱度\"},\n"
-                        "  {\"樓層\": \"2樓\", \"人設屬性\": \"微酸質疑\", \"留言內容\": \"這價格我寧願去打鳳凰電波吧...\", \"戰術目的\": \"故意拋出質疑做球給後續護航\"}\n"
-                        "]"
-                    )
-                    
-                    response = model.generate_content(prompt)
-                    
-                    # 🧹 黑魔法：精準擷取 JSON 字串，過濾掉 AI 的廢話
-                    raw_text = response.text
-                    start_idx = raw_text.find('[')
-                    end_idx = raw_text.rfind(']') + 1
-                    
-                    if start_idx != -1 and end_idx != -1:
-                        clean_json_str = raw_text[start_idx:end_idx]
+    if st.button("🚀 召喚水軍矩陣 (產出 20 則留言)", type="primary", key="btn8"):
+            if main_post_content and wom_goal:
+                with st.spinner("🤖 正在切換 20 種不同的人格分裂，生成矩陣中..."):
+                    try:
+                        prompt = (
+                            f"你是一位擁有15年豐富論壇操作經驗的口碑行銷資深專員。現在請根據以下【主貼文】，產出 20 則極度逼真的網友留言，並巧妙地達成【帶風向目標】。\n\n"
+                            f"📍 目標平台：{target_platform}\n"
+                            f"📍 帶風向目標：{wom_goal}\n"
+                            f"📍 主貼文內容：{main_post_content}\n\n"
+                            "【🏆 水軍矩陣比例與人設規則】\n"
+                            "你需要模擬出一個真實討論串的生態，這 20 則留言必須包含以下比例的人設，不能全部都在稱讚（那樣太假）：\n"
+                            "1. 伸手牌發問 (約 25%)：單純發問費用、地點、痛不痛、去哪買。\n"
+                            "2. 中立觀望與純推 (約 30%)：路過推個、卡一個等心得、感覺不錯但還在猶豫。\n"
+                            "3. 微酸質疑或抱怨競品 (約 15%)：提出合理的擔憂（如：這看起來很痛欸、可是另一家比較便宜），讓後面的暗樁有機會反駁。\n"
+                            "4. 深度護航與推坑 (約 30%)：詳細分享真實經驗，用親身經歷來達成我們的【帶風向目標】。用語必須去業配感。\n\n"
+                            "【⚠️ 輸出格式限制 (極度重要)】\n"
+                            "請嚴格使用 JSON Array 格式輸出。絕對不要包含任何 Markdown 標記 (如 ```json)、不要表格、不要任何解釋與廢話。\n"
+                            "請直接給出像這樣的純 JSON 陣列格式：\n"
+                            "[\n"
+                            "  {\"樓層\": \"1樓\", \"人設屬性\": \"伸手牌發問\", \"留言內容\": \"請問原PO這家在哪裡？費用大概多少？\", \"戰術目的\": \"製造詢問熱度\"},\n"
+                            "  {\"樓層\": \"2樓\", \"人設屬性\": \"微酸質疑\", \"留言內容\": \"這價格我寧願去打鳳凰電波吧...\", \"戰術目的\": \"故意拋出質疑做球給後續護航\"}\n"
+                            "]"
+                        )
                         
-                        try:
-                            # 嘗試將 JSON 轉換為 DataFrame
-                            data = json.loads(clean_json_str)
-                            df = pd.DataFrame(data)
-                            
-                            st.success("✨ 水軍矩陣集結完畢！您可以直接複製，或下載成 Excel 檔交給執行團隊。")
-                            
-                            # 在網頁上展示精美的表格
-                            st.dataframe(df, use_container_width=True, hide_index=True)
-                            
-                            # 製作下載按鈕 (使用 utf-8-sig 確保 Excel 打開中文不會亂碼)
-                            csv = df.to_csv(index=False).encode('utf-8-sig')
-                            st.download_button(
-                                label="📥 下載水軍劇本 (Excel CSV 格式)",
-                                data=csv,
-                                file_name='wom_matrix_script.csv',
-                                mime='text/csv',
-                            )
-                        except json.JSONDecodeError:
-                            st.error("⚠️ 資料解析失敗：AI 產出的 JSON 格式有語法錯誤。")
-                            st.text(clean_json_str) # 吐出錯誤的字串讓您檢查
-                    else:
-                        st.error("⚠️ 資料解析失敗：AI 未輸出預期的陣列格式。")
-                        st.text(raw_text)
+                        response = model.generate_content(prompt)
                         
-                except Exception as e:
-                    st.error(f"發生錯誤：{e}")
+                        # 🧹 黑魔法：精準擷取 JSON 字串，過濾掉 AI 的廢話
+                        raw_text = response.text
+                        start_idx = raw_text.find('[')
+                        end_idx = raw_text.rfind(']') + 1
+                        
+                        if start_idx != -1 and end_idx != -1:
+                            clean_json_str = raw_text[start_idx:end_idx]
+                            
+                            try:
+                                # 嘗試將 JSON 轉換為 DataFrame
+                                data = json.loads(clean_json_str)
+                                df = pd.DataFrame(data)
+                                
+                                st.success("✨ 水軍矩陣集結完畢！您可以直接複製，或下載成 Excel 檔交給執行團隊。")
+                                
+                                # 在網頁上展示精美的表格
+                                st.dataframe(df, use_container_width=True, hide_index=True)
+                                
+                                # 製作下載按鈕 (使用 utf-8-sig 確保 Excel 打開中文不會亂碼)
+                                csv = df.to_csv(index=False).encode('utf-8-sig')
+                                st.download_button(
+                                    label="📥 下載水軍劇本 (Excel CSV 格式)",
+                                    data=csv,
+                                    file_name='wom_matrix_script.csv',
+                                    mime='text/csv',
+                                )
+                            except json.JSONDecodeError:
+                                st.error("⚠️ 資料解析失敗：AI 產出的 JSON 格式有語法錯誤。")
+                                st.text(clean_json_str) # 吐出錯誤的字串讓您檢查
+                        else:
+                            st.error("⚠️ 資料解析失敗：AI 未輸出預期的陣列格式。")
+                            st.text(raw_text)
+                            
+                    except Exception as e:
+                        st.error(f"發生錯誤：{e}")
