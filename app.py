@@ -15,43 +15,47 @@ model = genai.GenerativeModel('gemini-2.5-flash')
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
 
 # ==========================================
-# 🔒 系統安全門禁：自動記憶登入狀態
+# 🔒 系統安全門禁：無痕純記憶版
 # ==========================================
 CORRECT_PASSWORD = "booyah"  # 您可以隨時更換密碼
 
-# 1. 檢查網址列是否已經持有「通行證」
-if st.query_params.get("auth") == "success":
-    st.session_state["logged_in"] = True
-
-# 2. 初始化暫存記憶體
+# 1. 初始化暫存記憶體
 if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
 
-# 3. 判斷邏輯：如果還沒登入，就顯示密碼輸入框擋住去路
+# 2. 判斷邏輯：如果還沒登入，就顯示密碼輸入框擋住去路
 if not st.session_state["logged_in"]:
-    st.sidebar.markdown("### 🔐 口碑操盤及分析系統")
-    app_password = st.sidebar.text_input("請輸入密碼：", type="password")
+    # 為了畫面美觀，我們把密碼框放在主畫面中央，而不是側邊欄
+    st.markdown("### 🔐 戰情室門禁系統")
+    app_password = st.text_input("請輸入通關密碼解鎖：", type="password")
     
     if app_password == CORRECT_PASSWORD:
         st.session_state["logged_in"] = True
-        # 🔑 關鍵黑魔法：發放網址通行證，這樣 F5 重整就不會被登出了
-        st.query_params["auth"] = "success" 
         st.rerun()  # 瞬間重新整理畫面，把密碼框乾淨地收起來
     elif app_password != "":
-        st.sidebar.error("⛔ 密碼錯誤，請重新輸入！")
+        st.error("⛔ 密碼錯誤，請重新輸入！")
     
     st.stop()  # 🛑 煞車：密碼不對，底下的程式碼全部強制停止運作
 
-# 4. 成功登入後的側邊欄介面
-st.sidebar.success("✅ 登入成功！")
-st.sidebar.caption("提示：重新整理網頁也不會被登出了。")
+# ==========================================
+# 💎 主標題區與登出按鈕 (排版優化)
+# ==========================================
+# 使用 columns 把標題放左邊 (佔 8 份寬度)，登出按鈕放右邊 (佔 2 份寬度)
+col_title, col_logout = st.columns([8, 2])
 
-# 貼心功能：手動登出按鈕
-if st.sidebar.button("🚪 登出系統"):
-    st.session_state["logged_in"] = False
-    st.query_params.clear()  # 收回網址通行證
-    st.rerun()
-    
+with col_title:
+    st.title("📝 全能口碑操盤與危機處理分析儀")
+    st.markdown("專屬 AI 輿情監測與公關防護主控台")
+
+with col_logout:
+    st.write("") # 為了讓按鈕對齊標題，加上兩個空白行往下推
+    st.write("")
+    if st.button("🚪 登出系統", use_container_width=True):
+        st.session_state["logged_in"] = False
+        st.rerun() # 按下登出後，瞬間重整畫面回到密碼鎖狀態
+
+st.divider()
+
 # ==========================================
 # 🛡️ 隱藏魔法 & 👑 專屬個人浮水印
 # ==========================================
@@ -101,13 +105,6 @@ footer {visibility: hidden;}
 </div>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
-
-# ==========================================
-# 💎 主標題區
-# ==========================================
-st.title("📝 全能口碑操盤與危機處理分析儀")
-st.markdown("專屬 AI 輿情監測與公關防護主控台")
-st.divider()
 
 # ==========================================
 # 🗂️ 核心功能：精簡為各大萬用分頁 + 口碑訓練儀
