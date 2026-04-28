@@ -9,8 +9,12 @@ GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 2. 使用最新 2.5 版本模型
-model = genai.GenerativeModel('gemini-pro')
-st.sidebar.success(f"目前引擎狀態：{model.model_name}")
+model = genai.GenerativeModel('gemini-2.5-flash')
+# 建立一個有「快取記憶體」的 AI 呼叫站，相同的問題一小時內不會重複扣 API 額度
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_ai_response(prompt_text):
+    response = model.generate_content(prompt_text)
+    return response.text
 
 # --- 網頁前端介面設計 ---
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
