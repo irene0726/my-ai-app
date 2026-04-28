@@ -15,20 +15,43 @@ model = genai.GenerativeModel('gemini-2.5-flash')
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
 
 # ==========================================
-# 🔒 系統安全門禁：總監專屬通關密碼
+# 🔒 系統安全門禁：自動記憶登入狀態
 # ==========================================
-st.sidebar.markdown("### 🔐 戰情室門禁系統")
-app_password = st.sidebar.text_input("請輸入通關密碼解鎖：", type="password")
+CORRECT_PASSWORD = "booyah"  # 您可以隨時更換密碼
 
-# 您可以在這裡自訂您的專屬密碼 (請將 irene2026 換成您想要的密碼)
-CORRECT_PASSWORD = "booyah"
+# 1. 檢查網址列是否已經持有「通行證」
+if st.query_params.get("auth") == "success":
+    st.session_state["logged_in"] = True
 
-if app_password != CORRECT_PASSWORD:
-    st.error("⛔ 系統已上鎖：請於左側側邊欄輸入正確密碼以喚醒 AI 大腦。")
-    st.stop()  # 🛑 黑魔法在這裡：密碼不對，底下的程式碼（包含所有分頁跟 API）全部強制停止運作！
+# 2. 初始化暫存記憶體
+if "logged_in" not in st.session_state:
+    st.session_state["logged_in"] = False
 
-st.sidebar.success("✅ 身分驗證成功，系統已解鎖！")
+# 3. 判斷邏輯：如果還沒登入，就顯示密碼輸入框擋住去路
+if not st.session_state["logged_in"]:
+    st.sidebar.markdown("### 🔐 戰情室門禁系統")
+    app_password = st.sidebar.text_input("請輸入通關密碼解鎖：", type="password")
+    
+    if app_password == CORRECT_PASSWORD:
+        st.session_state["logged_in"] = True
+        # 🔑 關鍵黑魔法：發放網址通行證，這樣 F5 重整就不會被登出了
+        st.query_params["auth"] = "success" 
+        st.rerun()  # 瞬間重新整理畫面，把密碼框乾淨地收起來
+    elif app_password != "":
+        st.sidebar.error("⛔ 密碼錯誤，請重新輸入！")
+    
+    st.stop()  # 🛑 煞車：密碼不對，底下的程式碼全部強制停止運作
 
+# 4. 成功登入後的側邊欄介面
+st.sidebar.success("✅ 身分驗證成功！")
+st.sidebar.caption("提示：重新整理網頁也不會被登出了。")
+
+# 貼心功能：手動登出按鈕
+if st.sidebar.button("🚪 登出系統"):
+    st.session_state["logged_in"] = False
+    st.query_params.clear()  # 收回網址通行證
+    st.rerun()
+    
 # ==========================================
 # 🛡️ 隱藏魔法 & 👑 專屬個人浮水印
 # ==========================================
