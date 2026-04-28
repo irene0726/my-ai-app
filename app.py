@@ -9,7 +9,8 @@ GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
 genai.configure(api_key=GOOGLE_API_KEY)
 
 # 2. 使用最新 2.5 版本模型
-model = genai.GenerativeModel('gemini-2.5-flash')
+model = genai.GenerativeModel('gemini-1.5-flash')
+st.sidebar.success(f"目前引擎狀態：{model.model_name}")
 
 # --- 網頁前端介面設計 ---
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
