@@ -25,8 +25,8 @@ if "logged_in" not in st.session_state:
 if not st.session_state["logged_in"]:
     st.markdown("### 🔐 口碑操盤及分析系統")
     
-    # 💡 關鍵優化：建立 1:2 的欄位，讓密碼框只佔據左側 1/3 的寬度
-    col_pw, _ = st.columns([1, 2]) 
+    # 💡 關鍵優化：建立 1:2 的欄位，讓密碼框只佔據左側 1/4 的寬度
+    col_pw, _ = st.columns([1, 3]) 
     
     with col_pw:
         app_password = st.text_input("請輸入密碼：", type="password")
