@@ -15,27 +15,29 @@ model = genai.GenerativeModel('gemini-2.5-flash')
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
 
 # ==========================================
-# 🔒 系統安全門禁：無痕純記憶版
+# 🔒 系統安全門禁：無痕純記憶版 (縮短輸入框寬度)
 # ==========================================
-CORRECT_PASSWORD = "booyah"  # 您可以隨時更換密碼
+CORRECT_PASSWORD = "booyah" 
 
-# 1. 初始化暫存記憶體
 if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
 
-# 2. 判斷邏輯：如果還沒登入，就顯示密碼輸入框擋住去路
 if not st.session_state["logged_in"]:
-    # 為了畫面美觀，我們把密碼框放在主畫面中央，而不是側邊欄
     st.markdown("### 🔐 口碑操盤及分析系統")
-    app_password = st.text_input("請輸入密碼：", type="password")
+    
+    # 💡 關鍵優化：建立 1:2 的欄位，讓密碼框只佔據左側 1/3 的寬度
+    col_pw, _ = st.columns([1, 2]) 
+    
+    with col_pw:
+        app_password = st.text_input("請輸入密碼：", type="password")
     
     if app_password == CORRECT_PASSWORD:
         st.session_state["logged_in"] = True
-        st.rerun()  # 瞬間重新整理畫面，把密碼框乾淨地收起來
+        st.rerun()
     elif app_password != "":
         st.error("⛔ 密碼錯誤，請重新輸入！")
     
-    st.stop()  # 🛑 煞車：密碼不對，底下的程式碼全部強制停止運作
+    st.stop()
 
 # ==========================================
 # 💎 主標題區與登出按鈕 (排版優化：精緻小按鈕)
