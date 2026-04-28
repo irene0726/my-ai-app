@@ -117,7 +117,7 @@ with tab1:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 分析完成！以下是專屬報告：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -208,7 +208,7 @@ with tab2:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 劇本生成完成！以下是專屬口碑操作企劃：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -248,7 +248,7 @@ with tab3:
                     )
                     response = model.generate_content(prompt)
                     st.success(f"✨ 比對完成！以下是 {len(items_to_compare)} 項目的深度分析報告：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -283,7 +283,7 @@ with tab4:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 危機拆彈與掩埋對策擬定完畢！")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -341,7 +341,7 @@ with tab5:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 轉化完成！請選擇最順眼的一篇去發文吧：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -408,7 +408,7 @@ with tab6:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 流量密碼生成完畢！請挑選最不違和的切入點去發文：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -465,10 +465,7 @@ with tab7:
                             "]"
                         )
                         
-                        response = model.generate_content(prompt)
-                        
-                        # 🧹 黑魔法：精準擷取 JSON 字串，過濾掉 AI 的廢話
-                        raw_text = response.text
+                        raw_text = get_ai_response(prompt)
                         start_idx = raw_text.find('[')
                         end_idx = raw_text.rfind(']') + 1
                         
@@ -566,7 +563,7 @@ with tab8:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 演算完成！請參考以下 E-E-A-T 高權重標題佈局：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
