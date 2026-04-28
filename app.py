@@ -10,14 +10,24 @@ genai.configure(api_key=GOOGLE_API_KEY)
 
 # 2. 使用最新 2.5 版本模型
 model = genai.GenerativeModel('gemini-2.5-flash')
-# 建立一個有「快取記憶體」的 AI 呼叫站，相同的問題一小時內不會重複扣 API 額度
-@st.cache_data(ttl=3600, show_spinner=False)
-def get_ai_response(prompt_text):
-    response = model.generate_content(prompt_text)
-    return response.text
 
 # --- 網頁前端介面設計 ---
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
+
+# ==========================================
+# 🔒 系統安全門禁：總監專屬通關密碼
+# ==========================================
+st.sidebar.markdown("### 🔐 戰情室門禁系統")
+app_password = st.sidebar.text_input("請輸入通關密碼解鎖：", type="password")
+
+# 您可以在這裡自訂您的專屬密碼 (請將 irene2026 換成您想要的密碼)
+CORRECT_PASSWORD = "booyah"
+
+if app_password != CORRECT_PASSWORD:
+    st.error("⛔ 系統已上鎖：請於左側側邊欄輸入正確密碼以喚醒 AI 大腦。")
+    st.stop()  # 🛑 黑魔法在這裡：密碼不對，底下的程式碼（包含所有分頁跟 API）全部強制停止運作！
+
+st.sidebar.success("✅ 身分驗證成功，系統已解鎖！")
 
 # ==========================================
 # 🛡️ 隱藏魔法 & 👑 專屬個人浮水印
@@ -64,7 +74,7 @@ footer {visibility: hidden;}
 </style>
 
 <div class="custom-watermark">
-    © 2026 Crafted by Irene Huang | Booyah
+    © 2026 Crafted by Irene Huang
 </div>
 """
 st.markdown(hide_streamlit_style, unsafe_allow_html=True)
@@ -117,7 +127,7 @@ with tab1:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 分析完成！以下是專屬報告：")
-                    st.write(get_ai_response(prompt))
+                    st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -208,7 +218,7 @@ with tab2:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 劇本生成完成！以下是專屬口碑操作企劃：")
-                    st.write(get_ai_response(prompt))
+                    st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -248,7 +258,7 @@ with tab3:
                     )
                     response = model.generate_content(prompt)
                     st.success(f"✨ 比對完成！以下是 {len(items_to_compare)} 項目的深度分析報告：")
-                    st.write(get_ai_response(prompt))
+                    st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -283,7 +293,7 @@ with tab4:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 危機拆彈與掩埋對策擬定完畢！")
-                    st.write(get_ai_response(prompt))
+                    st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -341,7 +351,7 @@ with tab5:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 轉化完成！請選擇最順眼的一篇去發文吧：")
-                    st.write(get_ai_response(prompt))
+                    st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -408,7 +418,7 @@ with tab6:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 流量密碼生成完畢！請挑選最不違和的切入點去發文：")
-                    st.write(get_ai_response(prompt))
+                    st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -465,7 +475,10 @@ with tab7:
                             "]"
                         )
                         
-                        raw_text = get_ai_response(prompt)
+                        response = model.generate_content(prompt)
+                        
+                        # 🧹 黑魔法：精準擷取 JSON 字串，過濾掉 AI 的廢話
+                        raw_text = response.text
                         start_idx = raw_text.find('[')
                         end_idx = raw_text.rfind(']') + 1
                         
@@ -563,8 +576,9 @@ with tab8:
                     )
                     response = model.generate_content(prompt)
                     st.success("✨ 演算完成！請參考以下 E-E-A-T 高權重標題佈局：")
-                    st.write(get_ai_response(prompt))
+                    st.write(response.text)
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
             st.warning("⚠️ SEO 操作最基本的就是「核心關鍵字」，請務必填寫喔！")
+
