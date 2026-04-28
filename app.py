@@ -38,21 +38,21 @@ if not st.session_state["logged_in"]:
     st.stop()  # 🛑 煞車：密碼不對，底下的程式碼全部強制停止運作
 
 # ==========================================
-# 💎 主標題區與登出按鈕 (排版優化)
+# 💎 主標題區與登出按鈕 (排版優化：精緻小按鈕)
 # ==========================================
-# 使用 columns 把標題放左邊 (佔 8 份寬度)，登出按鈕放右邊 (佔 2 份寬度)
-col_title, col_logout = st.columns([8, 2])
+# 1. 將比例調整為 9:1，把右邊的空間縮小，把按鈕往右邊擠
+col_title, col_logout = st.columns([9, 1])
 
 with col_title:
     st.title("📝 全能口碑操盤與危機處理分析儀")
     st.markdown("專屬 AI 輿情監測與公關防護主控台")
 
 with col_logout:
-    st.write("") # 為了讓按鈕對齊標題，加上兩個空白行往下推
-    st.write("")
-    if st.button("🚪 登出系統", use_container_width=True):
+    st.write("") # 稍微往下推一行，讓它跟標題的視覺重心對齊
+    # 2. 拿掉 use_container_width=True，按鈕就會恢復成原本小巧的文字尺寸
+    if st.button("🚪 登出"):
         st.session_state["logged_in"] = False
-        st.rerun() # 按下登出後，瞬間重整畫面回到密碼鎖狀態
+        st.rerun()
 
 st.divider()
 
