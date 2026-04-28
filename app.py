@@ -26,8 +26,8 @@ if "logged_in" not in st.session_state:
 # 2. 判斷邏輯：如果還沒登入，就顯示密碼輸入框擋住去路
 if not st.session_state["logged_in"]:
     # 為了畫面美觀，我們把密碼框放在主畫面中央，而不是側邊欄
-    st.markdown("### 🔐 戰情室門禁系統")
-    app_password = st.text_input("請輸入通關密碼解鎖：", type="password")
+    st.markdown("### 🔐 口碑操盤及分析系統")
+    app_password = st.text_input("密碼：", type="password")
     
     if app_password == CORRECT_PASSWORD:
         st.session_state["logged_in"] = True
