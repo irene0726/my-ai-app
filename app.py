@@ -29,8 +29,8 @@ if "logged_in" not in st.session_state:
 
 # 3. 判斷邏輯：如果還沒登入，就顯示密碼輸入框擋住去路
 if not st.session_state["logged_in"]:
-    st.sidebar.markdown("### 🔐 戰情室門禁系統")
-    app_password = st.sidebar.text_input("請輸入通關密碼解鎖：", type="password")
+    st.sidebar.markdown("### 🔐 口碑操盤及分析系統")
+    app_password = st.sidebar.text_input("請輸入密碼：", type="password")
     
     if app_password == CORRECT_PASSWORD:
         st.session_state["logged_in"] = True
@@ -43,7 +43,7 @@ if not st.session_state["logged_in"]:
     st.stop()  # 🛑 煞車：密碼不對，底下的程式碼全部強制停止運作
 
 # 4. 成功登入後的側邊欄介面
-st.sidebar.success("✅ 身分驗證成功！")
+st.sidebar.success("✅ 登入成功！")
 st.sidebar.caption("提示：重新整理網頁也不會被登出了。")
 
 # 貼心功能：手動登出按鈕
