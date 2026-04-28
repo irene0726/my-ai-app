@@ -27,7 +27,7 @@ if "logged_in" not in st.session_state:
 if not st.session_state["logged_in"]:
     # 為了畫面美觀，我們把密碼框放在主畫面中央，而不是側邊欄
     st.markdown("### 🔐 口碑操盤及分析系統")
-    app_password = st.text_input("密碼：", type="password")
+    app_password = st.text_input("請輸入密碼：", type="password")
     
     if app_password == CORRECT_PASSWORD:
         st.session_state["logged_in"] = True
