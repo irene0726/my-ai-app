@@ -497,8 +497,6 @@ with tab7:
                             "]"
                         )
                         
-                        response = model.generate_content(prompt)
-                        
                         # 🧹 黑魔法：精準擷取 JSON 字串，過濾掉 AI 的廢話
                         raw_text = get_ai_response(prompt)
                         start_idx = raw_text.find('[')
