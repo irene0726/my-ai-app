@@ -11,6 +11,12 @@ genai.configure(api_key=GOOGLE_API_KEY)
 # 2. 使用最新 2.5 版本模型
 model = genai.GenerativeModel('gemini-2.5-flash')
 
+# 👇 新增這段：建立「不重複扣額度」的 AI 呼叫站 (記憶時間: 1小時)
+@st.cache_data(ttl=3600, show_spinner=False)
+def get_ai_response(prompt_text):
+    response = model.generate_content(prompt_text)
+    return response.text
+
 # --- 網頁前端介面設計 ---
 st.set_page_config(page_title="全能口碑操盤分析儀", page_icon="📝", layout="wide")
 
@@ -147,9 +153,8 @@ with tab1:
                         "9. 🔗 競業分析及對比（找出相對於競業的優勢做口碑攻防）\n"
                         "10. 🎯 總結與行銷策略建議"
                     )
-                    response = model.generate_content(prompt)
                     st.success("✨ 分析完成！以下是專屬報告：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -238,9 +243,8 @@ with tab2:
                         "3. 🗣️ 暗樁推文與蓋樓劇本 (1-5樓推文，需包含中立觀望、真實提問、微負評包裝好評)\n"
                         "4. 🛡️ 競品防禦與帶風向話術：如果底下有真實網友留言推薦其他競品，我們的暗樁該用什麼話術自然地把風向帶回來？"
                     )
-                    response = model.generate_content(prompt)
                     st.success("✨ 劇本生成完成！以下是專屬口碑操作企劃：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -278,9 +282,8 @@ with tab3:
                         "5. ⚔️ 口碑行銷攻防建議：若客戶主打其中一項，該如何在論壇「請益文」中自然地引導風向？提供 3 個發文切角。\n"
                         "6. 💡 總結：一句話點出這幾者的定位差異。"
                     )
-                    response = model.generate_content(prompt)
                     st.success(f"✨ 比對完成！以下是 {len(items_to_compare)} 項目的深度分析報告：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -313,9 +316,8 @@ with tab4:
                         "7. ⏳ 黃金應對行動時間表 (2小時與24小時內的具體動作)\n"
                         "8. 🩹 官方回覆與私訊溝通範本 (提供公開留言與私訊安撫的文字範例)\n"
                     )
-                    response = model.generate_content(prompt)
                     st.success("✨ 危機拆彈與掩埋對策擬定完畢！")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -371,9 +373,8 @@ with tab5:
                         "🔹 版本 C：[直接給出改寫後的串文內容]\n"
                         "   └ 💡 爆款解析：[說明為什麼這樣寫能騙到 Threads 的演算法與網友的留言]\n"
                     )
-                    response = model.generate_content(prompt)
                     st.success("✨ 轉化完成！請選擇最順眼的一篇去發文吧：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -438,9 +439,8 @@ with tab6:
                         "   📱 主貼文：[完全符合平台語氣的請益文草稿，純文字]\n"
                         "   └ 💡 操盤戰術解析：[說明為什麼這個『牽拖邏輯』很合理，且能成功騙到熱門話題的自然流量]\n"
                     )
-                    response = model.generate_content(prompt)
                     st.success("✨ 流量密碼生成完畢！請挑選最不違和的切入點去發文：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
@@ -500,7 +500,7 @@ with tab7:
                         response = model.generate_content(prompt)
                         
                         # 🧹 黑魔法：精準擷取 JSON 字串，過濾掉 AI 的廢話
-                        raw_text = response.text
+                        raw_text = get_ai_response(prompt)
                         start_idx = raw_text.find('[')
                         end_idx = raw_text.rfind(']') + 1
                         
@@ -596,9 +596,8 @@ with tab8:
                         "   └ 📈 Google 演算法視角：[解析這個標題抓住了哪些 LSI 語意，以及為何能滿足設定的搜尋意圖]\n\n"
                         "(以此類推，產出 5 個選項)"
                     )
-                    response = model.generate_content(prompt)
                     st.success("✨ 演算完成！請參考以下 E-E-A-T 高權重標題佈局：")
-                    st.write(response.text)
+                    st.write(get_ai_response(prompt))
                 except Exception as e:
                     st.error(f"發生錯誤：{e}")
         else:
