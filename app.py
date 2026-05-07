@@ -98,7 +98,7 @@ footer {visibility: hidden;}
 .custom-watermark {
     position: fixed;
     bottom: 15px;      
-    left: 20px;       
+    left: 20px;        
     color: #BBBBBB;    
     font-size: 12px;   
     font-weight: 500;
@@ -117,7 +117,8 @@ st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 # ==========================================
 # 🗂️ 核心功能：精簡為各大萬用分頁 + 口碑訓練儀
 # ==========================================
-tab1, tab2, tab3, tab4, tab5, tab6 , tab7, tab8= st.tabs([
+# 👇 總監請注意：這裡新增了 tab9
+tab1, tab2, tab3, tab4, tab5, tab6 , tab7, tab8, tab9 = st.tabs([
     "🔍 產品網路健檢", 
     "💡 全產業口碑製造機", 
     "🔗 競品與服務比較", 
@@ -125,7 +126,8 @@ tab1, tab2, tab3, tab4, tab5, tab6 , tab7, tab8= st.tabs([
     "🔥 Threads 爆文潤飾",
     "📢 蹭熱度流量話題",
     "💬 口碑推文擴散生成",
-    "📝 SEO 關鍵字標題訓練"
+    "📝 SEO 關鍵字標題訓練",
+    "👑 Keypo 數據煉金爐"
 ])
 
 # ------------------------------------------
@@ -605,3 +607,74 @@ with tab8:
         else:
             st.warning("⚠️ SEO 操作最基本的就是「核心關鍵字」，請務必填寫喔！")
 
+
+# ------------------------------------------
+# 🚪 第九分頁：Keypo 數據煉金爐 (VOC 真實心聲萃取)
+# ------------------------------------------
+with tab9:
+    st.info("👑 **戰略級功能**：上傳 Keypo 匯出的 Excel 或 CSV 檔案，AI 將自動吞噬數千筆留言，為您提煉網友最真實的心聲與痛點。")
+
+    # 區塊 1：資料上傳
+    uploaded_file = st.file_uploader("📥 請拖曳或上傳 Keypo 原始數據檔 (支援 .xlsx, .csv)", type=["csv", "xlsx", "xls"], key="keypo_uploader")
+
+    if uploaded_file is not None:
+        try:
+            # 判斷檔案類型並讀取
+            if uploaded_file.name.endswith('.csv'):
+                df = pd.read_csv(uploaded_file)
+            else:
+                df = pd.read_excel(uploaded_file)
+
+            # 區塊 2：戰情預覽
+            st.success(f"✅ 成功讀取資料！總共包含 {len(df)} 筆聲量紀錄。")
+            with st.expander("👁️ 點擊預覽前 3 筆原始資料"):
+                st.dataframe(df.head(3))
+
+            # 嘗試抓取留言內容欄位 (防呆機制：尋找 '內容' 或 'Content'，若無則抓取第一欄)
+            content_column = None
+            for col in df.columns:
+                if '內容' in col or 'content' in col.lower() or '留言' in col:
+                    content_column = col
+                    break
+            if not content_column:
+                content_column = df.columns[0] # 找不到就硬抓第一欄
+
+            # 將 DataFrame 轉為文字 (抓取前 1000 筆精華避免過載)
+            raw_data_text = " ".join(df[content_column].astype(str).tolist()[:1000])
+
+            # 區塊 3：VOC 核心情報萃取
+            st.markdown("### 🎯 網友真實心聲萃取 (Voice of Customer)")
+            st.markdown("系統將自動閱讀所有留言，並為您總結產品的核心討論面向與真實優缺點。")
+
+            # 區塊 4：啟動分析
+            if st.button("🚀 啟動萃取：提煉網友真實評價", type="primary", key="btn9"):
+                with st.spinner("系統正在吞噬巨量數據，提煉網友真實心聲中，請稍候..."):
+                    final_prompt = f"""
+                    現在時間是 2026 年 5 月。你是一位頂尖的資深口碑數據分析師。
+                    我不想要看單篇文章的流水帳，請你直接閱讀下方【Keypo 原始論壇留言數據】，
+                    幫我精準萃取出「網友到底都在討論這個產品/服務的什麼？」以及「他們最真實的想法與評價」。
+
+                    請用最精煉、條理分明的格式，整理出以下三大情報（不要寫廢話，請直接切入重點）：
+
+                    1. 🔍 核心討論面向 (Top Topics)：
+                       網友最關注的 3 到 5 個面向是什麼？（例如：價格與CP值、術後恢復期與副作用、真實成效評估、服務態度等），請依據討論熱度排序。
+
+                    2. 🗣️ 真實評價總結 (Real Voice)：
+                       - ✅ 【最常被稱讚的優點】：具體說明網友喜歡什麼？在什麼情境下被推薦？
+                       - ❌ 【最在意的痛點與疑慮】：這點非常重要！請真實呈現網友的抱怨、反推原因、或購買前的猶豫點。
+
+                    3. 💬 網友真實金句 (Quotes)：
+                       請從數據中，挑選出 2 到 3 句最具代表性的「網友原話（請稍微修飾錯別字即可）」，作為支持上述論點的佐證。
+
+                    【嚴格要求】：
+                    - 絕對不可自己捏造數據，所有總結必須 100% 來自於下方的原始留言數據。
+                    - 請保持客觀，如果是負評居多，請直接誠實告訴我，不要粉飾太平。
+
+                    【Keypo 原始數據】：
+                    {raw_data_text}
+                    """
+                    st.success("✨ 萃取完成！以下為網友真實心聲總結：")
+                    st.write(get_ai_response(final_prompt))
+
+        except Exception as e:
+            st.error(f"❌ 讀取檔案時發生錯誤，請確認檔案格式是否正確。詳細錯誤：{e}")
