@@ -630,18 +630,27 @@ with tab9:
             with st.expander("👁️ 點擊預覽前 3 筆原始資料"):
                 st.dataframe(df.head(3))
 
-            # 嘗試抓取留言內容欄位 (防呆機制：尋找 '內容' 或 'Content'，若無則抓取第一欄)
-            content_column = None
-            for col in df.columns:
-                if '內容' in col or 'content' in col.lower() or '留言' in col:
-                    content_column = col
+            # 🔥 進化版：自動猜測 + 讓總監手動確認欄位
+            st.markdown("#### 🎯 步驟 1：請確認「留言內容」在哪個欄位？")
+            
+            # 系統先做一次聰明的猜測，找出預設選項
+            default_index = 0
+            for i, col in enumerate(df.columns):
+                if any(keyword in col.lower() for keyword in ['內容', '內文', '留言', '標題', 'content']):
+                    default_index = i
                     break
-            if not content_column:
-                content_column = df.columns[0] # 找不到就硬抓第一欄
+            
+            # 讓使用者在網頁上用下拉選單親自確認
+            content_column = st.selectbox(
+                "系統已為您列出報表中的所有欄位，請選擇真正包含「網友文字」的那個欄位：", 
+                df.columns, 
+                index=default_index
+            )
 
             # 將 DataFrame 轉為文字 (抓取前 1000 筆精華避免過載)
+            # 現在系統會乖乖聽您選的欄位去抓資料了！
             raw_data_text = " ".join(df[content_column].astype(str).tolist()[:1000])
-
+            st.info(f"💡 目前系統將會分析【{content_column}】這個欄位的文字。")
             # 區塊 3：VOC 核心情報萃取
             st.markdown("### 🎯 網友真實心聲萃取 (Voice of Customer)")
             st.markdown("系統將自動閱讀所有留言，並為您總結產品的核心討論面向與真實優缺點。")
