@@ -134,7 +134,7 @@ tab1, tab2, tab3, tab4, tab5, tab6 , tab7, tab8, tab9 = st.tabs([
 # 🚪 第一分頁：產品網路健檢
 # ------------------------------------------
 with tab1:
-    st.info("💡 **操作指南**：輸入產品或品牌名稱，將自動彙整各大論壇真實聲量與優缺點等報告。")
+    st.info("💡**操作指南**：輸入產品或品牌名稱，將自動彙整各大論壇真實聲量與優缺點等報告。")
     product_name = st.text_input("📦 請輸入想查詢的「品牌或產品名稱」：", placeholder="例如：理膚寶水 B5、娘家大紅麴、某某室內設計...")
     
     if st.button("🚀 開始深度健檢", type="primary"):
@@ -166,7 +166,7 @@ with tab1:
 # 🚪 第二分頁：全產業口碑製造機
 # ------------------------------------------
 with tab2:
-    st.info("💡 **操作指南**：設定產業與人設條件，下列方框會即時顯示指令。")
+    st.info("💡**操作指南**：設定產業與人設條件，下列方框會即時顯示指令。")
     
     col_ind, col_t, col_a = st.columns([1.5, 2, 2])
     with col_ind:
@@ -179,7 +179,7 @@ with tab2:
     st.markdown("---")
     st.markdown("#### 🎛️ 發文者人設及背景設定")
     
-    urgent_text = st.text_input("🚨 發文動機及情境 (強烈建議填寫)：", placeholder="例如：下個月要拍婚紗、長輩健檢報告紅字、剛買新房預算只有一百萬...")
+    urgent_text = st.text_input("🚨 發文動機及情境 (越清楚越好)：", placeholder="例如：下個月要拍婚紗、長輩健檢報告紅字、剛買新房預算只有一百萬...")
 
     col_p1, col_p2 = st.columns(2)
     with col_p1:
@@ -220,7 +220,7 @@ with tab2:
     
     st.code(live_prompt, language="markdown")
         
-    if st.button("🚀 生成全方位口碑劇本", type="primary"):
+    if st.button("🚀 生成口碑內容", type="primary"):
         if treatment and advantages:
             with st.spinner("✍️ 正在融合產業知識與鄉民人設..."):
                 try:
@@ -256,7 +256,7 @@ with tab2:
 # 🚪 第三分頁：競品與服務比較
 # ------------------------------------------
 with tab3:
-    st.info("💡 **操作指南**：輸入 2 到 4 個選手(產品/服務/醫美儀器皆可)進行對比，系統會產出內容及比較表格。")
+    st.info("💡**操作指南**：輸入 2 到 4 個選手(產品/服務/醫美儀器皆可)進行對比，系統會產出內容及比較表格。")
     col1, col2, col3, col4 = st.columns(4)
     with col1:
         item1 = st.text_input("🥊 選手 1", placeholder="例如：娘家大紅麴")
@@ -267,7 +267,7 @@ with tab3:
     with col4:
         item4 = st.text_input("🥊 選手 4 (選填)", placeholder="例如：其他競品...")
     
-    if st.button("🚀 開始多重比拼", type="primary", key="btn3"):
+    if st.button("🚀 開始比較", type="primary", key="btn3"):
         items_to_compare = [i for i in [item1, item2, item3, item4] if i.strip()]
         if len(items_to_compare) >= 2:
             items_str = "、".join(items_to_compare)
@@ -295,10 +295,10 @@ with tab3:
 # 🚪 第四分頁：負評拆彈與攻防
 # ------------------------------------------
 with tab4:
-    st.error("🚨 **操作指南**：請將原始負評貼在下方，啟動風向平衡及口碑攻防對策。")
+    st.error("💡**操作指南**：請將原始負評貼在下方，啟動風向平衡及口碑攻防對策。")
     raw_reviews = st.text_area("💬 請貼上網友的「原始負評」內容：", height=150, placeholder="將各產業的客訴或抱怨文貼在這裡...")
     
-    if st.button("🚀 啟動緊急拆彈程序", type="primary", key="btn4"):
+    if st.button("🚀 啟動拆彈程序", type="primary", key="btn4"):
         if raw_reviews:
             with st.spinner("🚨 危機處理專家已連線，正在擬定平衡與攻防對策..."):
                 try:
@@ -329,7 +329,7 @@ with tab4:
 # 🧵 第五分頁：Threads 爆文潤飾 (🔥 演算法共鳴優化版)
 # ------------------------------------------
 with tab5:
-    st.info("🔥 **Threads 爆文製造機**：將文案轉化為自帶流量的「脆」風格高互動串文。")
+    st.info("💡**Threads 爆文製造機**：將文案轉化為自帶流量的「脆」風格高互動串文。")
     
     st.markdown("#### 📝 1. 貼上原始草稿")
     draft_text = st.text_area(
@@ -356,7 +356,7 @@ with tab5:
             with st.spinner("🤖 正在注入 Threads 演算法爆款邏輯..."):
                 try:
                     prompt = (
-                        f"你現在是台灣 Threads (脆) 平台上的超級網紅，非常懂 Threads 的演算法機制與網友心理學，並會參考近期Threads高流量文章撰文方式。\n"
+                        f"你現在是台灣 Threads (脆) 平台上的超級網紅，同時非常懂 Threads 近期的演算法機制與時下網友心理學，並會參考近期Threads高流量、高觸及文章撰文方式。\n"
                         f"你的任務是將以下【原始草稿】改寫成有極高機率引發大量留言與轉發的「Threads 爆款串文」。\n\n"
                         f"【原始草稿】：\n{draft_text}\n\n"
                         f"【指定人設語氣】：{threads_persona}\n\n"
@@ -390,7 +390,7 @@ with tab5:
 # 🚪 第六分頁：蹭熱度流量話題
 # ------------------------------------------
 with tab6:
-    st.info("🔥 **操作指南**：輸入時下流行話題與客戶產品，將生成「神邏輯牽拖」的超自然請益文，輕鬆收割時事流量！")
+    st.info("💡**操作指南**：輸入時下流行話題與客戶產品，將生成「神邏輯牽拖」的超自然請益文，輕鬆收割時事流量！")
     
     col_h1, col_h2 = st.columns(2)
     with col_h1:
@@ -415,7 +415,7 @@ with tab6:
 
     st.divider()
 
-    if st.button("🚀 生成熱點蹭流量請益文", type="primary", key="btn7"):
+    if st.button("🚀 生成熱議流量文", type="primary", key="btn7"):
         if trending_topic and client_product:
             with st.spinner(f"🤖 正在尋找「{trending_topic}」與「{client_product}」的完美神邏輯橋樑..."):
                 try:
@@ -456,9 +456,9 @@ with tab6:
 # 🚪 第七分頁：口碑推文擴散生成
 # ------------------------------------------
 with tab7:
-    st.info("🪖 **操作指南**：輸入主文與帶風向目標，將生成 20 則不同人設的留言，並支援一鍵匯出 Excel 以方便執行。")
+    st.info("💡**操作指南**：輸入主文與帶風向目標，將生成 20 則不同人設的留言，並支援一鍵匯出 Excel 以方便執行。")
     
-    st.markdown("#### 📝 1. 設定戰場與主貼文")
+    st.markdown("#### 📝 1. 設定風向與主貼文")
     col_w1, col_w2 = st.columns(2)
     with col_w1:
         target_platform = st.selectbox(
@@ -479,12 +479,12 @@ with tab7:
 
     st.divider()
 
-    if st.button("🚀 召喚水軍矩陣 (產出 20 則留言)", type="primary", key="btn8"):
+    if st.button("🚀 產出風向推文", type="primary", key="btn8"):
             if main_post_content and wom_goal:
-                with st.spinner("🤖 正在切換 20 種不同的人格分裂，生成矩陣中..."):
+                with st.spinner("🤖 正在切換 20 種不同的人格，生成留言中..."):
                     try:
                         prompt = (
-                            f"你是一位擁有15年豐富論壇操作經驗的口碑行銷資深專員。現在請根據以下【主貼文】，產出 20 則極度逼真的網友留言，並巧妙地達成【帶風向目標】。\n\n"
+                            f"你是一位擁有15年豐富論壇操作經驗的口碑行銷資深專員。現在請根據以下【主貼文】，產出 20 則極度逼真的網友留言，文字內容長度需有長有短，並巧妙地達成【帶風向目標】。\n\n"
                             f"📍 目標平台：{target_platform}\n"
                             f"📍 帶風向目標：{wom_goal}\n"
                             f"📍 主貼文內容：{main_post_content}\n\n"
@@ -516,7 +516,7 @@ with tab7:
                                 data = json.loads(clean_json_str)
                                 df = pd.DataFrame(data)
                                 
-                                st.success("✨ 水軍矩陣集結完畢！您可以直接複製，或下載成 Excel 檔交給執行團隊。")
+                                st.success("✨ 整理完畢！您可以直接複製，或下載成 Excel 檔。")
                                 
                                 # 在網頁上展示精美的表格
                                 st.dataframe(df, use_container_width=True, hide_index=True)
@@ -524,7 +524,7 @@ with tab7:
                                 # 製作下載按鈕 (使用 utf-8-sig 確保 Excel 打開中文不會亂碼)
                                 csv = df.to_csv(index=False).encode('utf-8-sig')
                                 st.download_button(
-                                    label="📥 下載水軍劇本 (Excel CSV 格式)",
+                                    label="📥 下載 (Excel CSV 格式)",
                                     data=csv,
                                     file_name='wom_matrix_script.csv',
                                     mime='text/csv',
@@ -543,9 +543,9 @@ with tab7:
 # 🚪 第八分頁：SEO 關鍵字標題訓練
 # ------------------------------------------
 with tab8:
-    st.info("💡 **高階 SEO 模式**：導入 E-E-A-T 真實經驗原則與 LSI 語意關聯。產出的標題將兼具「鄉民高點擊率」與「Google 爬蟲高權重」。")
+    st.info("💡**操作指南**：導入 E-E-A-T 真實經驗原則與 LSI 語意關聯。產出的標題將兼具「鄉民高點擊率」與「Google 爬蟲高權重」。")
     
-    st.markdown("#### 🔑 1. 設定 SEO 關鍵字矩陣 (Keyword Matrix)")
+    st.markdown("#### 🔑 1. 設定 SEO 關鍵字矩陣")
     col_k1, col_k2, col_k3 = st.columns(3)
     with col_k1:
         seo_core_kw = st.text_input("🎯 核心關鍵字：", placeholder="例：法令紋玻尿酸", help="您最希望排上 Google 第一頁的主詞彙。")
@@ -559,8 +559,8 @@ with tab8:
     with col_i1:
         post_type = st.selectbox(
             "📝 文章類型 (影響標題結構)：",
-            ["🙋‍♀️ 請益/求救文 (以自然提問、求推薦、擔憂為主)", 
-             "✨ 真實分享文 (以素人真實心得、避雷、心得為主)"]
+            ["🙋‍♀️ 請益文 (以自然提問、求推薦、擔憂為主)", 
+             "✨ 分享文 (以素人真實心得、避雷、心得為主)"]
         )
     with col_i2:
         seo_intent = st.selectbox(
@@ -573,12 +573,12 @@ with tab8:
 
     st.divider()
 
-    if st.button("🚀 演算 Google 演算法霸榜標題", type="primary", key="btn5"):
+    if st.button("🚀 產出 Google 演算法標題", type="primary", key="btn5"):
         if seo_core_kw:
             with st.spinner("🤖 正在對接 Google 搜尋意圖與 E-E-A-T 原則..."):
                 try:
                     prompt = (
-                        f"你是一位精通 Google 搜尋演算法 (特別是 E-E-A-T 原則與 2024 核心更新) 以及台灣論壇生態的頂級 SEO 專家。\n"
+                        f"你是一位精通 Google 搜尋演算法 (特別是 E-E-A-T 原則與 2024 核心更新) 以及台灣論壇生態的頂級 SEO 專家，並了解 Google 最新的演算法機制。\n"
                         f"操作目標：產出極度自然、完全沒有業配感，但又能完美吻合 Google 搜尋爬蟲語意邏輯的「素人論壇標題」。\n\n"
                         f"【SEO 關鍵字矩陣】\n"
                         f"📍 核心關鍵字：{seo_core_kw}\n"
@@ -612,10 +612,10 @@ with tab8:
 # 🚪 第九分頁：Keypo 輿情分析
 # ------------------------------------------
 with tab9:
-    st.info("👑 **戰略級功能**：上傳 Keypo 匯出的 Excel 或 CSV 檔案，AI 將自動分析數千筆留言，為您提煉網友最真實的心聲與痛點。")
+    st.info("💡**操作指南**：上傳 Keypo 匯出的 Excel 或 CSV 檔案，AI 將自動分析數千筆留言，整理網友的回饋與痛點。")
 
     # 區塊 1：資料上傳
-    uploaded_file = st.file_uploader("📥 請拖曳或上傳 Keypo 原始數據檔 (支援 .xlsx, .csv)", type=["csv", "xlsx", "xls"], key="keypo_uploader")
+    uploaded_file = st.file_uploader("📥 請上傳 Keypo 原始數據檔 (支援 .xlsx, .csv)", type=["csv", "xlsx", "xls"], key="keypo_uploader")
 
     if uploaded_file is not None:
         try:
@@ -656,8 +656,8 @@ with tab9:
             st.markdown("系統將自動閱讀所有留言，並為您總結產品的核心討論面向與真實優缺點。")
 
             # 區塊 4：啟動分析
-            if st.button("🚀 啟動萃取：提煉網友真實評價", type="primary", key="btn9"):
-                with st.spinner("系統正在吞噬巨量數據，提煉網友真實心聲中，請稍候..."):
+            if st.button("🚀 開始分析網友回饋", type="primary", key="btn9"):
+                with st.spinner("系統正在接收巨量數據，分析網友真實心聲中，請稍候..."):
                     final_prompt = f"""
                     現在時間是 2026 年 5 月。你是一位頂尖的資深口碑數據分析師。
                     我不想要看單篇文章的流水帳，請你直接閱讀下方【Keypo 原始論壇留言數據】，
